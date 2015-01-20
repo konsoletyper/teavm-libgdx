@@ -19,7 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.7</java.version>
     <teavm.version>0.3.0-SNAPSHOT</teavm.version>
-    <gdx.version>1.3.2-SNAPSHOT</gdx.version>
+    <gdx.version>1.5.3</gdx.version>
   </properties>
 
   <dependencies>
