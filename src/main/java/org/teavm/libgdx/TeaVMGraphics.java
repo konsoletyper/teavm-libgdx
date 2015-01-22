@@ -18,10 +18,14 @@ package org.teavm.libgdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
+import org.teavm.dom.browser.Screen;
+import org.teavm.dom.browser.Window;
 import org.teavm.dom.html.HTMLCanvasElement;
 import org.teavm.dom.webgl.WebGLContextAttributes;
 import org.teavm.dom.webgl.WebGLContextAttributesFactory;
+import org.teavm.dom.webgl.WebGLRenderingContext;
 import org.teavm.jso.JS;
+import org.teavm.jso.JSStringArrayReader;
 
 /**
  *
@@ -29,9 +33,19 @@ import org.teavm.jso.JS;
  */
 public class TeaVMGraphics implements Graphics {
     private HTMLCanvasElement element;
+    private TeaVMApplicationConfig config;
+    private WebGLRenderingContext context;
+    long frameId = -1;
+    float deltaTime;
+    long lastTimeStamp;
+    long time;
+    int frames;
+    float fps;
 
     public TeaVMGraphics(HTMLCanvasElement element, TeaVMApplicationConfig config) {
         this.element = element;
+        this.config = config;
+
         WebGLContextAttributesFactory attrFactory = (WebGLContextAttributesFactory)JS.getGlobal();
         WebGLContextAttributes attr = attrFactory.createWebGLContextAttributes();
         attr.setAlpha(config.isAlphaEnabled());
@@ -40,7 +54,8 @@ public class TeaVMGraphics implements Graphics {
         attr.setPremultipliedAlpha(config.isPremultipliedAlpha());
         attr.setPreserveDrawingBuffer(config.isDrawingBufferPreserved());
 
-        element.getContext("webgl", attr);
+        context = (WebGLRenderingContext)element.getContext("webgl");
+        context.viewport(0, 0, element.getWidth(), element.getHeight());
     }
 
     @Override
@@ -60,57 +75,57 @@ public class TeaVMGraphics implements Graphics {
 
     @Override
     public int getWidth() {
-        return 0;
+        return element.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return element.getHeight();
     }
 
     @Override
     public long getFrameId() {
-        return 0;
+        return frameId;
     }
 
     @Override
     public float getDeltaTime() {
-        return 0;
+        return deltaTime;
     }
 
     @Override
     public float getRawDeltaTime() {
-        return 0;
+        return deltaTime;
     }
 
     @Override
     public int getFramesPerSecond() {
-        return 0;
+        return (int)fps;
     }
 
     @Override
     public GraphicsType getType() {
-        return null;
+        return GraphicsType.WebGL;
     }
 
     @Override
     public float getPpiX() {
-        return 0;
+        return 96;
     }
 
     @Override
     public float getPpiY() {
-        return 0;
+        return 96;
     }
 
     @Override
     public float getPpcX() {
-        return 0;
+        return 96 / 2.54f;
     }
 
     @Override
     public float getPpcY() {
-        return 0;
+        return 96 / 2.54f;
     }
 
     @Override
@@ -120,17 +135,19 @@ public class TeaVMGraphics implements Graphics {
 
     @Override
     public boolean supportsDisplayModeChange() {
-        return false;
+        return true;
     }
 
     @Override
     public DisplayMode[] getDisplayModes() {
-        return null;
+        Window window = (Window)JS.getGlobal();
+        Screen screen = window.getScreen();
+        return new DisplayMode[] { new DisplayMode(screen.getWidth(), screen.getHeight(), 60, 8) {}};
     }
 
     @Override
     public DisplayMode getDesktopDisplayMode() {
-        return null;
+        return getDisplayModes()[0];
     }
 
     @Override
@@ -153,11 +170,17 @@ public class TeaVMGraphics implements Graphics {
 
     @Override
     public BufferFormat getBufferFormat() {
-        return null;
+        return new BufferFormat(8, 8, 8, 0, 16, config.isStencilEnabled() ? 8 : 0, 0, false);
     }
 
     @Override
     public boolean supportsExtension(String extension) {
+        JSStringArrayReader array = context.getSupportedExtensions();
+        for (int i = 0; i < array.getLength(); ++i) {
+            if (array.get(i).equals(extension)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -177,5 +200,18 @@ public class TeaVMGraphics implements Graphics {
     @Override
     public boolean isFullscreen() {
         return false;
+    }
+
+    public void update () {
+        long currTimeStamp = System.currentTimeMillis();
+        deltaTime = (currTimeStamp - lastTimeStamp) / 1000.0f;
+        lastTimeStamp = currTimeStamp;
+        time += deltaTime;
+        frames++;
+        if (time > 1) {
+            this.fps = frames;
+            time = 0;
+            frames = 0;
+        }
     }
 }

@@ -22,6 +22,7 @@ public class TeaVMApplication implements Application {
     private ApplicationListener listener;
     private TeaVMApplicationConfig config;
     private HTMLCanvasElement canvas;
+    private TeaVMGraphics graphics;
 
     public TeaVMApplication(ApplicationListener listener, TeaVMApplicationConfig config) {
         this.listener = listener;
@@ -30,7 +31,11 @@ public class TeaVMApplication implements Application {
 
     public void start() {
         canvas = config.getCanvas();
+        graphics = new TeaVMGraphics(canvas, config);
         Gdx.app = this;
+        Gdx.graphics = graphics;
+        Gdx.gl = graphics.getGL20();
+        Gdx.gl20 = graphics.getGL20();
         listener.create();
         listener.resize(canvas.getWidth(), canvas.getHeight());
         delayedStep();
@@ -55,7 +60,7 @@ public class TeaVMApplication implements Application {
 
     @Override
     public Graphics getGraphics() {
-        return null;
+        return graphics;
     }
 
     @Override
