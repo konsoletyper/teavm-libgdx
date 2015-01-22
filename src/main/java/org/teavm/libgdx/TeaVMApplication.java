@@ -55,7 +55,6 @@ public class TeaVMApplication implements Application {
 
     @Override
     public Graphics getGraphics() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -86,43 +85,43 @@ public class TeaVMApplication implements Application {
     @Override
     public void log(String tag, String message) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void log(String tag, String message, Throwable exception) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void error(String tag, String message) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void error(String tag, String message, Throwable exception) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void debug(String tag, String message) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void debug(String tag, String message, Throwable exception) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void setLogLevel(int logLevel) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -170,24 +169,23 @@ public class TeaVMApplication implements Application {
     @Override
     public void postRunnable(Runnable runnable) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void exit() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void addLifecycleListener(LifecycleListener listener) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void removeLifecycleListener(LifecycleListener listener) {
         // TODO Auto-generated method stub
-        
     }
 }
