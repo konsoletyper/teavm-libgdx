@@ -3,6 +3,7 @@ package org.teavm.libgdx.plugin;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.utils.BufferUtils;
 import java.io.BufferedInputStream;
@@ -14,12 +15,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.teavm.common.Mapper;
 import org.teavm.diagnostics.Diagnostics;
 import org.teavm.libgdx.emu.BufferUtilsEmulator;
+import org.teavm.libgdx.emu.PixmapEmulator;
 import org.teavm.libgdx.emu.TextureDataEmulator;
 import org.teavm.model.*;
 import org.teavm.model.instructions.*;
 import org.teavm.model.util.ModelUtils;
+import org.teavm.parsing.ClassRefsRenamer;
 
 public class OverlayTransformer implements ClassHolderTransformer {
     @Override
@@ -30,6 +34,8 @@ public class OverlayTransformer implements ClassHolderTransformer {
             transformTextureData(cls, innerSource);
         } else if (cls.getName().equals(FileHandle.class.getName())) {
             transformFileHandle(cls);
+        } else if (cls.getName().equals(Pixmap.class.getName())) {
+            replaceClass(cls, innerSource.get(PixmapEmulator.class.getName()));
         }
     }
 
@@ -134,6 +140,26 @@ public class OverlayTransformer implements ClassHolderTransformer {
         for (MethodDescriptor methodDesc : descList) {
             cls.removeMethod(cls.getMethod(methodDesc));
             cls.addMethod(ModelUtils.copyMethod(emuCls.getMethod(methodDesc)));
+        }
+    }
+
+    private void replaceClass(final ClassHolder cls, final ClassReader emuCls) {
+        ClassRefsRenamer renamer = new ClassRefsRenamer(new Mapper<String, String>() {
+            @Override public String map(String preimage) {
+                return preimage.equals(emuCls.getName()) ? cls.getName() : preimage;
+            }
+        });
+        for (FieldHolder field : cls.getFields().toArray(new FieldHolder[0])) {
+            cls.removeField(field);
+        }
+        for (MethodHolder method : cls.getMethods().toArray(new MethodHolder[0])) {
+            cls.removeMethod(method);
+        }
+        for (FieldReader field : emuCls.getFields()) {
+            cls.addField(ModelUtils.copyField(field));
+        }
+        for (MethodReader method : emuCls.getMethods()) {
+            cls.addMethod(renamer.rename(ModelUtils.copyMethod(method)));
         }
     }
 }
