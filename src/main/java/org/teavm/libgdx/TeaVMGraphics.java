@@ -41,6 +41,7 @@ public class TeaVMGraphics implements Graphics {
     long time;
     int frames;
     float fps;
+    private TeaVMGL20 gl20;
 
     public TeaVMGraphics(HTMLCanvasElement element, TeaVMApplicationConfig config) {
         this.element = element;
@@ -56,6 +57,7 @@ public class TeaVMGraphics implements Graphics {
 
         context = (WebGLRenderingContext)element.getContext("webgl");
         context.viewport(0, 0, element.getWidth(), element.getHeight());
+        gl20 = new TeaVMGL20(context);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class TeaVMGraphics implements Graphics {
 
     @Override
     public GL20 getGL20() {
-        return null;
+        return gl20;
     }
 
     @Override
