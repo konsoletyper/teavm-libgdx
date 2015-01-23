@@ -23,6 +23,9 @@ public class TeaVMApplication implements Application {
     private TeaVMApplicationConfig config;
     private HTMLCanvasElement canvas;
     private TeaVMGraphics graphics;
+    private TeaVMFiles files;
+    private TeaVMAudio audio;
+    private TeaVMInput input;
 
     public TeaVMApplication(ApplicationListener listener, TeaVMApplicationConfig config) {
         this.listener = listener;
@@ -30,12 +33,30 @@ public class TeaVMApplication implements Application {
     }
 
     public void start() {
+        TeaVMFileLoader.loadFiles(new TeaVMFilePreloadListener() {
+            @Override
+            public void error() {
+            }
+            @Override
+            public void complete() {
+                startGdx();
+            }
+        });
+    }
+
+    private void startGdx() {
         canvas = config.getCanvas();
         graphics = new TeaVMGraphics(canvas, config);
+        files = new TeaVMFiles();
+        audio = new TeaVMAudio();
+        input = new TeaVMInput(canvas);
         Gdx.app = this;
         Gdx.graphics = graphics;
         Gdx.gl = graphics.getGL20();
         Gdx.gl20 = graphics.getGL20();
+        Gdx.files = files;
+        Gdx.audio = audio;
+        Gdx.input = input;
         listener.create();
         listener.resize(canvas.getWidth(), canvas.getHeight());
         delayedStep();
@@ -65,20 +86,17 @@ public class TeaVMApplication implements Application {
 
     @Override
     public Audio getAudio() {
-        // TODO Auto-generated method stub
-        return null;
+        return audio;
     }
 
     @Override
     public Input getInput() {
-        // TODO Auto-generated method stub
-        return null;
+        return input;
     }
 
     @Override
     public Files getFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        return files;
     }
 
     @Override
@@ -137,13 +155,11 @@ public class TeaVMApplication implements Application {
 
     @Override
     public ApplicationType getType() {
-        // TODO Auto-generated method stub
-        return null;
+        return ApplicationType.WebGL;
     }
 
     @Override
     public int getVersion() {
-        // TODO Auto-generated method stub
         return 0;
     }
 

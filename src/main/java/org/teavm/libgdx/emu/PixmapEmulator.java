@@ -36,6 +36,7 @@ import org.teavm.dom.typedarrays.ArrayBuffer;
 import org.teavm.dom.typedarrays.Uint8ClampedArray;
 import org.teavm.javascript.ni.GeneratedBy;
 import org.teavm.jso.JS;
+import org.teavm.libgdx.TeaVMFileHandle;
 
 /**
  *
@@ -89,6 +90,7 @@ public class PixmapEmulator implements Disposable {
         this.format = Format.RGBA8888;
         canvas = (HTMLCanvasElement)document.createElement("canvas");
         canvas.getStyle().setProperty("display", "none");
+        document.getBody().appendChild(canvas);
         canvas.setWidth(width);
         canvas.setHeight(height);
         context = (CanvasRenderingContext2D)canvas.getContext("2d");
