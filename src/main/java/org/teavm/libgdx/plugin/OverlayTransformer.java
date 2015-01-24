@@ -1,6 +1,7 @@
 package org.teavm.libgdx.plugin;
 
 import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -17,7 +18,9 @@ import java.util.List;
 import java.util.Set;
 import org.teavm.common.Mapper;
 import org.teavm.diagnostics.Diagnostics;
+import org.teavm.jso.plugin.JSObjectClassTransformer;
 import org.teavm.libgdx.emu.BufferUtilsEmulator;
+import org.teavm.libgdx.emu.ControllersEmulator;
 import org.teavm.libgdx.emu.PixmapEmulator;
 import org.teavm.libgdx.emu.TextureDataEmulator;
 import org.teavm.model.*;
@@ -26,6 +29,8 @@ import org.teavm.model.util.ModelUtils;
 import org.teavm.parsing.ClassRefsRenamer;
 
 public class OverlayTransformer implements ClassHolderTransformer {
+    private JSObjectClassTransformer transformer = new JSObjectClassTransformer();
+
     @Override
     public void transformClass(ClassHolder cls, ClassReaderSource innerSource, Diagnostics diagnostics) {
         if (cls.getName().equals(BufferUtils.class.getName())) {
@@ -36,7 +41,10 @@ public class OverlayTransformer implements ClassHolderTransformer {
             transformFileHandle(cls);
         } else if (cls.getName().equals(Pixmap.class.getName())) {
             replaceClass(cls, innerSource.get(PixmapEmulator.class.getName()));
+        } else if (cls.getName().equals(Controllers.class.getName())) {
+            transformControllers(cls, innerSource);
         }
+        transformer.transformClass(cls, innerSource, diagnostics);
     }
 
     private void transformBufferUtils(ClassHolder cls, ClassReaderSource innerSource) {
@@ -161,5 +169,22 @@ public class OverlayTransformer implements ClassHolderTransformer {
         for (MethodReader method : emuCls.getMethods()) {
             cls.addMethod(renamer.rename(ModelUtils.copyMethod(method)));
         }
+    }
+
+    private void transformControllers(final ClassHolder cls, ClassReaderSource classSource) {
+        MethodDescriptor desc = new MethodDescriptor("initialize", void.class);
+        cls.removeMethod(cls.getMethod(desc));
+        ClassReader patchClass = classSource.get(ControllersEmulator.class.getName());
+        MethodHolder patch = ModelUtils.copyMethod(patchClass.getMethod(desc));
+        ClassRefsRenamer renamer = new ClassRefsRenamer(new Mapper<String, String>() {
+            @Override
+            public String map(String preimage) {
+                if (preimage.equals(ControllersEmulator.class.getName())) {
+                    return Controllers.class.getName();
+                }
+                return preimage;
+            }
+        });
+        cls.addMethod(renamer.rename(patch));
     }
 }
