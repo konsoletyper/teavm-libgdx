@@ -228,6 +228,9 @@ public class PixmapEmulator implements Disposable {
     }
 
     public ByteBuffer getPixels() {
+        if (pixels == null) {
+            pixels = context.getImageData(0, 0, width, height).getData();
+        }
         return ByteBuffer.wrap(bufferAsArray(pixels.getBuffer()));
     }
 

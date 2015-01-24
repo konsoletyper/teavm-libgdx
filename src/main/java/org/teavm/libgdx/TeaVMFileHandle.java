@@ -130,17 +130,22 @@ public class TeaVMFileHandle extends FileHandle {
             if (next == -1) {
                 break;
             }
-            String part = file.substring(index, next);
-            if (!part.isEmpty() && !part.equals(".")) {
-                if (part.equals("..")) {
-                    result.remove(result.size() - 1);
-                } else {
-                    result.add(part);
-                }
-            }
+            addPart(index, next, result);
             index = next + 1;
         }
+        addPart(index, file.length(), result);
         return result.toArray(new String[result.size()]);
+    }
+
+    private void addPart(int index, int next, List<String> result) {
+        String part = file.substring(index, next);
+        if (!part.isEmpty() && !part.equals(".")) {
+            if (part.equals("..")) {
+                result.remove(result.size() - 1);
+            } else {
+                result.add(part);
+            }
+        }
     }
 
     @Override

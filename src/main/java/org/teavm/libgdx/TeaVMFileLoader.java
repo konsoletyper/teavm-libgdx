@@ -146,6 +146,8 @@ public class TeaVMFileLoader {
         public void run(TaskHandler handler) {
             this.handler = handler;
             HTMLImageElement image = (HTMLImageElement)window.getDocument().createElement("img");
+            window.getDocument().getBody().appendChild(image);
+            image.getStyle().setProperty("display", "none");
             image.setSrc(path);
             image.addEventListener("load", this);
             entry.imageElem = image;
