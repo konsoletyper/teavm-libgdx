@@ -237,18 +237,17 @@ public class TeaVMInput implements Input, EventListener {
 
     @Override
     public boolean isPeripheralAvailable(Peripheral peripheral) {
-        if (peripheral == Peripheral.Accelerometer)
-            return false;
-        if (peripheral == Peripheral.Compass)
-            return false;
-        if (peripheral == Peripheral.HardwareKeyboard)
-            return true;
-        if (peripheral == Peripheral.MultitouchScreen)
-            return isTouchScreen();
-        if (peripheral == Peripheral.OnscreenKeyboard)
-            return false;
-        if (peripheral == Peripheral.Vibrator)
-            return false;
+        switch (peripheral) {
+            case Accelerometer:
+            case Compass:
+            case OnscreenKeyboard:
+            case Vibrator:
+                return false;
+            case HardwareKeyboard:
+                return true;
+            case MultitouchScreen:
+                return isTouchScreen();
+        }
         return false;
     }
 
@@ -394,7 +393,7 @@ public class TeaVMInput implements Input, EventListener {
     public void handleEvent(Event e) {
         if (e.getType().equals("mousedown")) {
             MouseEvent mouseEvent = (MouseEvent)e;
-            if (!e.getTarget().equals(canvas) || touched[0]) {
+            if (e.getTarget() != canvas || touched[0]) {
                 float mouseX = getRelativeX(mouseEvent, canvas);
                 float mouseY = getRelativeY(mouseEvent, canvas);
                 if (mouseX < 0 || mouseX > Gdx.graphics.getWidth() || mouseY < 0 ||mouseY > Gdx.graphics.getHeight()) {
