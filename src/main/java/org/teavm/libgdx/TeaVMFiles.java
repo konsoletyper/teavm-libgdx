@@ -19,7 +19,7 @@ public class TeaVMFiles implements Files {
 
     @Override
     public FileHandle classpath(String path) {
-        throw new GdxRuntimeException("Classpath files not supported in GWT backend");
+        return new TeaVMFileHandle(path, FileType.Classpath);
     }
 
     @Override

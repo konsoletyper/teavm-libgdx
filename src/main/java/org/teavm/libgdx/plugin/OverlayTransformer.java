@@ -1,16 +1,10 @@
 package org.teavm.libgdx.plugin;
 
-import com.badlogic.gdx.Files.FileType;
-import com.badlogic.gdx.controllers.Controllers;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.TextureData;
-import com.badlogic.gdx.utils.BufferUtils;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.Reader;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,12 +15,41 @@ import org.teavm.diagnostics.Diagnostics;
 import org.teavm.jso.plugin.JSObjectClassTransformer;
 import org.teavm.libgdx.emu.BufferUtilsEmulator;
 import org.teavm.libgdx.emu.ControllersEmulator;
+import org.teavm.libgdx.emu.IndexArrayEmulator;
+import org.teavm.libgdx.emu.Matrix4Emulator;
 import org.teavm.libgdx.emu.PixmapEmulator;
 import org.teavm.libgdx.emu.TextureDataEmulator;
-import org.teavm.model.*;
-import org.teavm.model.instructions.*;
+import org.teavm.libgdx.emu.VertexArrayEmulator;
+import org.teavm.model.BasicBlock;
+import org.teavm.model.ClassHolder;
+import org.teavm.model.ClassHolderTransformer;
+import org.teavm.model.ClassReader;
+import org.teavm.model.ClassReaderSource;
+import org.teavm.model.FieldHolder;
+import org.teavm.model.FieldReader;
+import org.teavm.model.MethodDescriptor;
+import org.teavm.model.MethodHolder;
+import org.teavm.model.MethodReader;
+import org.teavm.model.MethodReference;
+import org.teavm.model.Program;
+import org.teavm.model.Variable;
+import org.teavm.model.instructions.ConstructInstruction;
+import org.teavm.model.instructions.ExitInstruction;
+import org.teavm.model.instructions.InvocationType;
+import org.teavm.model.instructions.InvokeInstruction;
+import org.teavm.model.instructions.RaiseInstruction;
 import org.teavm.model.util.ModelUtils;
 import org.teavm.parsing.ClassRefsRenamer;
+import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.glutils.IndexArray;
+import com.badlogic.gdx.graphics.glutils.VertexArray;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.BufferUtils;
 
 public class OverlayTransformer implements ClassHolderTransformer {
     private JSObjectClassTransformer transformer = new JSObjectClassTransformer();
@@ -43,6 +66,12 @@ public class OverlayTransformer implements ClassHolderTransformer {
             replaceClass(cls, innerSource.get(PixmapEmulator.class.getName()));
         } else if (cls.getName().equals(Controllers.class.getName())) {
             transformControllers(cls, innerSource);
+        } else if (cls.getName().equals(Matrix4.class.getName())) {
+            transformMatrix(cls, innerSource);
+        } else if (cls.getName().equals(VertexArray.class.getName())) {
+            replaceClass(cls, innerSource.get(VertexArrayEmulator.class.getName()));
+        } else if (cls.getName().equals(IndexArray.class.getName())) {
+            replaceClass(cls, innerSource.get(IndexArrayEmulator.class.getName()));
         }
         transformer.transformClass(cls, innerSource, diagnostics);
     }
@@ -51,7 +80,22 @@ public class OverlayTransformer implements ClassHolderTransformer {
         List<MethodDescriptor> descList = new ArrayList<>();
         descList.add(new MethodDescriptor("freeMemory", ByteBuffer.class, void.class));
         descList.add(new MethodDescriptor("newDisposableByteBuffer", int.class, ByteBuffer.class));
+        descList.add(new MethodDescriptor("copyJni", float[].class, Buffer.class, int.class, int.class, void.class));
         replaceMethods(cls, BufferUtilsEmulator.class, innerSource, descList);
+    }
+
+    private void transformMatrix(ClassHolder cls, ClassReaderSource innerSource) {
+        List<MethodDescriptor> descList = new ArrayList<>();
+        descList.add(new MethodDescriptor("inv", float[].class, boolean.class));
+        descList.add(new MethodDescriptor("mul", float[].class, float[].class, void.class));
+        descList.add(new MethodDescriptor("prj", float[].class, float[].class, int.class, int.class, int.class,
+                void.class));
+        replaceMethods(cls, Matrix4Emulator.class, innerSource, descList);
+        ClassReader emuClass = innerSource.get(Matrix4Emulator.class.getName());
+        cls.addMethod(ModelUtils.copyMethod(emuClass.getMethod(new MethodDescriptor("matrix4_det", float[].class,
+                float.class))));
+        cls.addMethod(ModelUtils.copyMethod(emuClass.getMethod(new MethodDescriptor("matrix4_proj", float[].class,
+                float[].class, int.class, void.class))));
     }
 
     private void transformTextureData(ClassHolder cls, ClassReaderSource innerSource) {
@@ -153,7 +197,8 @@ public class OverlayTransformer implements ClassHolderTransformer {
 
     private void replaceClass(final ClassHolder cls, final ClassReader emuCls) {
         ClassRefsRenamer renamer = new ClassRefsRenamer(new Mapper<String, String>() {
-            @Override public String map(String preimage) {
+            @Override
+            public String map(String preimage) {
                 return preimage.equals(emuCls.getName()) ? cls.getName() : preimage;
             }
         });

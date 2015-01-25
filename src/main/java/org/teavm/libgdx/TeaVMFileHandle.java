@@ -52,7 +52,6 @@ public class TeaVMFileHandle extends FileHandle {
         this.file = fixSlashes(path);
     }
 
-
     @Override
     public String path() {
         return file;

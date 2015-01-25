@@ -157,6 +157,22 @@ public class TeaVMGL20 implements GL20 {
         return result;
     }
 
+    public Uint8Array copyU(ByteBuffer buffer) {
+        buffer = buffer.duplicate();
+        Uint8Array result = window.createUint8Array(buffer.remaining());
+        byte[] tmp;
+        if (buffer.hasArray()) {
+            tmp = buffer.array();
+        } else {
+            tmp = new byte[buffer.remaining()];
+            buffer.get(tmp);
+        }
+        for (int i = 0; i < tmp.length; ++i) {
+            result.set(i, tmp[0]);
+        }
+        return result;
+    }
+
     private int allocateUniformLocationId(int program, WebGLUniformLocation location) {
         Map<Integer, WebGLUniformLocation> progUniforms = uniforms.get(program);
         if (progUniforms == null) {
@@ -493,7 +509,7 @@ public class TeaVMGL20 implements GL20 {
             int type, Buffer pixels) {
         if (pixels instanceof ByteBuffer) {
             gl.texImage2D(target, level, internalformat, width, height, border, format, type,
-                    copy((ByteBuffer)pixels));
+                    copyU((ByteBuffer)pixels));
         } else if (pixels instanceof ShortBuffer) {
             gl.texImage2D(target, level, internalformat, width, height, border, format, type,
                     copy((ShortBuffer)pixels));
@@ -593,6 +609,10 @@ public class TeaVMGL20 implements GL20 {
             gl.bufferData(target, copy((FloatBuffer)data), usage);
         } else if (data instanceof ShortBuffer) {
             gl.bufferData(target, copy((ShortBuffer)data), usage);
+        } else if (data instanceof IntBuffer) {
+            gl.bufferData(target, copy((IntBuffer)data), usage);
+        } else if (data instanceof ByteBuffer) {
+            gl.bufferData(target, copy((ByteBuffer)data), usage);
         } else {
             throw new GdxRuntimeException("Can only cope with FloatBuffer and ShortBuffer at the moment");
         }
@@ -604,6 +624,10 @@ public class TeaVMGL20 implements GL20 {
             gl.bufferSubData(target, offset, copy((FloatBuffer)data));
         } else if (data instanceof ShortBuffer) {
             gl.bufferSubData(target, offset, copy((ShortBuffer)data));
+        } else if (data instanceof IntBuffer) {
+            gl.bufferSubData(target, offset, copy((IntBuffer)data));
+        } else if (data instanceof ByteBuffer) {
+            gl.bufferSubData(target, offset, copy((ByteBuffer)data));
         } else {
             throw new GdxRuntimeException("Can only cope with FloatBuffer and ShortBuffer at the moment");
         }

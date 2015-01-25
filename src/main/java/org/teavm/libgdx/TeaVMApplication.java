@@ -1,10 +1,12 @@
 package org.teavm.libgdx;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.teavm.dom.browser.TimerHandler;
 import org.teavm.dom.browser.Window;
 import org.teavm.dom.html.HTMLCanvasElement;
 import org.teavm.jso.JS;
-
+import org.teavm.jso.JSBody;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Audio;
@@ -26,6 +28,8 @@ public class TeaVMApplication implements Application {
     private TeaVMFiles files;
     private TeaVMAudio audio;
     private TeaVMInput input;
+    private int logLevel = LOG_ERROR;
+    private List<LifecycleListener> lifecycleListeners = new ArrayList<>();
 
     public TeaVMApplication(ApplicationListener listener, TeaVMApplicationConfig config) {
         this.listener = listener;
@@ -67,10 +71,15 @@ public class TeaVMApplication implements Application {
             @Override public void onTimer() {
                 step();
             }
-        }, 0);
+        }, 10);
     }
 
     private void step() {
+        graphics.update();
+        graphics.frameId++;
+        listener.resize(canvas.getWidth(), canvas.getHeight());
+        listener.render();
+        input.reset();
         delayedStep();
     }
 
@@ -107,50 +116,54 @@ public class TeaVMApplication implements Application {
 
     @Override
     public void log(String tag, String message) {
-        // TODO Auto-generated method stub
-
+        if (logLevel > LOG_INFO) {
+            consoleLog("Info " + tag + ": " + message);
+        }
     }
 
     @Override
     public void log(String tag, String message, Throwable exception) {
-        // TODO Auto-generated method stub
-
+        if (logLevel > LOG_INFO) {
+            consoleLog("Info " + tag + ": " + message);
+        }
     }
 
     @Override
     public void error(String tag, String message) {
-        // TODO Auto-generated method stub
-
+        if (logLevel > LOG_ERROR) {
+            consoleLog("Error " + tag + ": " + message);
+        }
     }
 
     @Override
     public void error(String tag, String message, Throwable exception) {
-        // TODO Auto-generated method stub
-
+        if (logLevel > LOG_ERROR) {
+            consoleLog("Error " + tag + ": " + message);
+        }
     }
 
     @Override
     public void debug(String tag, String message) {
-        // TODO Auto-generated method stub
-
+        if (logLevel >= LOG_DEBUG) {
+            consoleLog("Debug " + tag + ": " + message);
+        }
     }
 
     @Override
     public void debug(String tag, String message, Throwable exception) {
-        // TODO Auto-generated method stub
-
+        if (logLevel > LOG_DEBUG) {
+            consoleLog("Debug " + tag + ": " + message);
+        }
     }
 
     @Override
     public void setLogLevel(int logLevel) {
-        // TODO Auto-generated method stub
-
+        this.logLevel = logLevel;
     }
 
     @Override
     public int getLogLevel() {
-        // TODO Auto-generated method stub
-        return 0;
+        return logLevel;
     }
 
     @Override
@@ -195,18 +208,18 @@ public class TeaVMApplication implements Application {
 
     @Override
     public void exit() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void addLifecycleListener(LifecycleListener listener) {
-        // TODO Auto-generated method stub
-
+        lifecycleListeners.add(listener);
     }
 
     @Override
     public void removeLifecycleListener(LifecycleListener listener) {
-        // TODO Auto-generated method stub
+        lifecycleListeners.remove(listener);
     }
+
+    @JSBody(params = "message", script = "console.log(\"TeaVM: \" + message);")
+    native static public void consoleLog(String message);
 }
