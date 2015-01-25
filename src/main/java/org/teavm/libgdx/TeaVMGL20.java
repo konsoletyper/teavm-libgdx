@@ -88,7 +88,7 @@ public class TeaVMGL20 implements GL20 {
             buffer.get(tmp);
         }
         for (int i = 0; i < tmp.length; ++i) {
-            result.set(i, tmp[0]);
+            result.set(i, tmp[i]);
         }
         return result;
     }
@@ -104,7 +104,7 @@ public class TeaVMGL20 implements GL20 {
             buffer.get(tmp);
         }
         for (int i = 0; i < tmp.length; ++i) {
-            result.set(i, tmp[0]);
+            result.set(i, tmp[i]);
         }
         return result;
     }
@@ -120,7 +120,7 @@ public class TeaVMGL20 implements GL20 {
             buffer.get(tmp);
         }
         for (int i = 0; i < tmp.length; ++i) {
-            result.set(i, tmp[0]);
+            result.set(i, tmp[i]);
         }
         return result;
     }
@@ -136,7 +136,7 @@ public class TeaVMGL20 implements GL20 {
             buffer.get(tmp);
         }
         for (int i = 0; i < tmp.length; ++i) {
-            result.set(i, tmp[0]);
+            result.set(i, tmp[i]);
         }
         return result;
     }
@@ -152,7 +152,7 @@ public class TeaVMGL20 implements GL20 {
             buffer.get(tmp);
         }
         for (int i = 0; i < tmp.length; ++i) {
-            result.set(i, tmp[0]);
+            result.set(i, tmp[i]);
         }
         return result;
     }
@@ -168,7 +168,7 @@ public class TeaVMGL20 implements GL20 {
             buffer.get(tmp);
         }
         for (int i = 0; i < tmp.length; ++i) {
-            result.set(i, tmp[0]);
+            result.set(i, tmp[i]);
         }
         return result;
     }

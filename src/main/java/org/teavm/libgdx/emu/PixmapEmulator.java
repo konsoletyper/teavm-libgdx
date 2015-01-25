@@ -39,11 +39,11 @@ import org.teavm.jso.JS;
 import org.teavm.libgdx.TeaVMFileHandle;
 
 /**
- *
+ * 
  * @author Alexey Andreev
  */
 public class PixmapEmulator implements Disposable {
-    private static final Window window = (Window)JS.getGlobal();
+    private static final Window window = (Window) JS.getGlobal();
     private static final HTMLDocument document = window.getDocument();
     public static Map<Integer, PixmapEmulator> pixmaps = new HashMap<>();
     static int nextId = 0;
@@ -63,7 +63,7 @@ public class PixmapEmulator implements Disposable {
     private ByteBuffer pixelsBuffer;
 
     public PixmapEmulator(FileHandle file) {
-        TeaVMFileHandle teavmFile = (TeaVMFileHandle)file;
+        TeaVMFileHandle teavmFile = (TeaVMFileHandle) file;
         TeaVMFileHandle.FSEntry entry = teavmFile.entry();
         HTMLImageElement img = entry.imageElem;
         if (img == null) {
@@ -88,16 +88,14 @@ public class PixmapEmulator implements Disposable {
         this.width = width;
         this.height = height;
         this.format = Format.RGBA8888;
-        canvas = (HTMLCanvasElement)document.createElement("canvas");
+        canvas = (HTMLCanvasElement) document.createElement("canvas");
         canvas.getStyle().setProperty("display", "none");
         document.getBody().appendChild(canvas);
         canvas.setWidth(width);
         canvas.setHeight(height);
-        context = (CanvasRenderingContext2D)canvas.getContext("2d");
+        context = (CanvasRenderingContext2D) canvas.getContext("2d");
         context.setGlobalCompositeOperation("source-over");
-        buffer = BufferUtils.newIntBuffer(1);
         id = nextId++;
-        buffer.put(0, id);
         pixmaps.put(id, this);
     }
 
@@ -145,7 +143,10 @@ public class PixmapEmulator implements Disposable {
 
     @Override
     public void dispose() {
-        pixmaps.remove(id);
+        PixmapEmulator pixmap = pixmaps.remove(id);
+        if (pixmap.canvas != null) {
+            pixmap.canvas.getParentNode().removeChild(pixmap.canvas);
+        }
     }
 
     public void setColor(int color) {
@@ -159,9 +160,9 @@ public class PixmapEmulator implements Disposable {
     }
 
     public void setColor(float r, float g, float b, float a) {
-        this.r = (int)(r * 255);
-        this.g = (int)(g * 255);
-        this.b = (int)(b * 255);
+        this.r = (int) (r * 255);
+        this.g = (int) (g * 255);
+        this.b = (int) (b * 255);
         this.a = a;
         color = make(this.r, this.g, this.b, this.a);
         context.setFillStyle(color);

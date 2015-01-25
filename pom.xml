@@ -29,16 +29,19 @@
       <groupId>org.teavm</groupId>
       <artifactId>teavm-classlib</artifactId>
       <version>${teavm.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.teavm</groupId>
       <artifactId>teavm-jso</artifactId>
       <version>${teavm.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.teavm</groupId>
       <artifactId>teavm-dom</artifactId>
       <version>${teavm.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- libGDX -->
@@ -46,21 +49,25 @@
       <groupId>com.badlogicgames.gdx</groupId>
       <artifactId>gdx</artifactId>
       <version>${gdx.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.badlogicgames.gdx</groupId>
       <artifactId>gdx-controllers</artifactId>
       <version>${gdx.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.badlogicgames.gdx</groupId>
       <artifactId>gdx-backend-gwt</artifactId>
       <version>${gdx.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.badlogicgames.gdx</groupId>
       <artifactId>gdx-controllers-gwt</artifactId>
       <version>${gdx.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
