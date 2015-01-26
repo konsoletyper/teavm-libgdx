@@ -1,11 +1,11 @@
 package org.teavm.libgdx.emu;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.VertexData;
 import com.badlogic.gdx.utils.BufferUtils;
@@ -13,23 +13,20 @@ import com.badlogic.gdx.utils.BufferUtils;
 public class VertexArrayEmulator implements VertexData {
     final VertexAttributes attributes;
     final FloatBuffer buffer;
-    final ByteBuffer byteBuffer;
     int bufferHandle;
     final boolean isStatic;
     final int usage;
     boolean isDirty = false;
     boolean isBound = false;
 
-    public VertexArrayEmulator(int numVertices, VertexAttribute... attributes) {
+    public VertexArrayEmulator (int numVertices, VertexAttribute... attributes) {
         this(numVertices, new VertexAttributes(attributes));
     }
 
-    /**
-     * Constructs a new interleaved VertexArray
+    /** Constructs a new interleaved VertexArray
      * 
      * @param numVertices the maximum number of vertices
-     * @param attributes the {@link VertexAttributes}
-     */
+     * @param attributes the {@link VertexAttributes} */
     public VertexArrayEmulator(int numVertices, VertexAttributes attributes) {
         this(false, numVertices, attributes);
     }
@@ -37,9 +34,12 @@ public class VertexArrayEmulator implements VertexData {
     /**
      * Constructs a new interleaved VertexBufferObject.
      * 
-     * @param isStatic whether the vertex data is static.
-     * @param numVertices the maximum number of vertices
-     * @param attributes the {@link VertexAttribute}s.
+     * @param isStatic
+     *            whether the vertex data is static.
+     * @param numVertices
+     *            the maximum number of vertices
+     * @param attributes
+     *            the {@link VertexAttribute}s.
      */
     public VertexArrayEmulator(boolean isStatic, int numVertices, VertexAttribute... attributes) {
         this(isStatic, numVertices, new VertexAttributes(attributes));
@@ -48,18 +48,19 @@ public class VertexArrayEmulator implements VertexData {
     /**
      * Constructs a new interleaved VertexBufferObject.
      * 
-     * @param isStatic whether the vertex data is static.
-     * @param numVertices the maximum number of vertices
-     * @param attributes the {@link VertexAttributes}.
+     * @param isStatic
+     *            whether the vertex data is static.
+     * @param numVertices
+     *            the maximum number of vertices
+     * @param attributes
+     *            the {@link VertexAttributes}.
      */
     public VertexArrayEmulator(boolean isStatic, int numVertices, VertexAttributes attributes) {
         this.isStatic = isStatic;
         this.attributes = attributes;
 
-        byteBuffer = BufferUtils.newUnsafeByteBuffer(this.attributes.vertexSize * numVertices);
-        buffer = byteBuffer.asFloatBuffer();
+        buffer = BufferUtils.newFloatBuffer(this.attributes.vertexSize / 4 * numVertices);
         buffer.flip();
-        byteBuffer.flip();
         bufferHandle = Gdx.gl20.glGenBuffer();
         usage = isStatic ? GL20.GL_STATIC_DRAW : GL20.GL_DYNAMIC_DRAW;
     }
@@ -71,12 +72,12 @@ public class VertexArrayEmulator implements VertexData {
 
     @Override
     public int getNumVertices() {
-        return buffer.limit() * 4 / attributes.vertexSize;
+        return buffer.limit() / (attributes.vertexSize / 4);
     }
 
     @Override
     public int getNumMaxVertices() {
-        return byteBuffer.capacity() / attributes.vertexSize;
+        return buffer.capacity() / (attributes.vertexSize / 4);
     }
 
     @Override
@@ -87,7 +88,7 @@ public class VertexArrayEmulator implements VertexData {
 
     private void bufferChanged() {
         if (isBound) {
-            Gdx.gl20.glBufferData(GL20.GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+            Gdx.gl20.glBufferData(GL20.GL_ARRAY_BUFFER, buffer.limit(), buffer, usage);
             isDirty = false;
         }
     }
@@ -95,7 +96,7 @@ public class VertexArrayEmulator implements VertexData {
     @Override
     public void setVertices(float[] vertices, int offset, int count) {
         isDirty = true;
-        BufferUtils.copy(vertices, byteBuffer, count, offset);
+        BufferUtils.copy(vertices, buffer, count, offset);
         buffer.position(0);
         buffer.limit(count);
         bufferChanged();
@@ -104,11 +105,10 @@ public class VertexArrayEmulator implements VertexData {
     @Override
     public void updateVertices(int targetOffset, float[] vertices, int sourceOffset, int count) {
         isDirty = true;
-        final int pos = byteBuffer.position();
-        byteBuffer.position(targetOffset * 4);
-        BufferUtils.copy(vertices, sourceOffset, count, byteBuffer);
-        byteBuffer.position(pos);
-        buffer.position(0);
+        final int pos = buffer.position();
+        buffer.position(targetOffset);
+        BufferUtils.copy(vertices, sourceOffset, count, buffer);
+        buffer.position(pos);
         bufferChanged();
     }
 
@@ -116,7 +116,15 @@ public class VertexArrayEmulator implements VertexData {
      * Binds this VertexBufferObject for rendering via glDrawArrays or
      * glDrawElements
      * 
-     * @param shader the shader
+     * @param shader
+     *            the shader
+     */
+    /**
+     * Binds this VertexBufferObject for rendering via glDrawArrays or
+     * glDrawElements
+     * 
+     * @param shader
+     *            the shader
      */
     @Override
     public void bind(ShaderProgram shader) {
@@ -129,8 +137,7 @@ public class VertexArrayEmulator implements VertexData {
 
         gl.glBindBuffer(GL20.GL_ARRAY_BUFFER, bufferHandle);
         if (isDirty) {
-            byteBuffer.limit(buffer.limit() * 4);
-            gl.glBufferData(GL20.GL_ARRAY_BUFFER, byteBuffer.limit(), byteBuffer, usage);
+            gl.glBufferData(GL20.GL_ARRAY_BUFFER, buffer.limit(), buffer, usage);
             isDirty = false;
         }
 
@@ -139,24 +146,33 @@ public class VertexArrayEmulator implements VertexData {
             for (int i = 0; i < numAttributes; i++) {
                 final VertexAttribute attribute = attributes.get(i);
                 final int location = shader.getAttributeLocation(attribute.alias);
-                if (location < 0)
+                if (location < 0) {
                     continue;
+                }
                 shader.enableVertexAttribute(location);
 
-                shader.setVertexAttribute(location, attribute.numComponents, attribute.type, attribute.normalized,
-                        attributes.vertexSize, attribute.offset);
+                if (attribute.usage == Usage.ColorPacked)
+                    shader.setVertexAttribute(location, attribute.numComponents, GL20.GL_UNSIGNED_BYTE, true,
+                            attributes.vertexSize, attribute.offset);
+                else
+                    shader.setVertexAttribute(location, attribute.numComponents, GL20.GL_FLOAT, false,
+                            attributes.vertexSize, attribute.offset);
             }
-
         } else {
             for (int i = 0; i < numAttributes; i++) {
                 final VertexAttribute attribute = attributes.get(i);
                 final int location = locations[i];
-                if (location < 0)
+                if (location < 0) {
                     continue;
+                }
                 shader.enableVertexAttribute(location);
 
-                shader.setVertexAttribute(location, attribute.numComponents, attribute.type, attribute.normalized,
-                        attributes.vertexSize, attribute.offset);
+                if (attribute.usage == Usage.ColorPacked)
+                    shader.setVertexAttribute(location, attribute.numComponents, GL20.GL_UNSIGNED_BYTE, true,
+                            attributes.vertexSize, attribute.offset);
+                else
+                    shader.setVertexAttribute(location, attribute.numComponents, GL20.GL_FLOAT, false,
+                            attributes.vertexSize, attribute.offset);
             }
         }
         isBound = true;
@@ -165,7 +181,8 @@ public class VertexArrayEmulator implements VertexData {
     /**
      * Unbinds this VertexBufferObject.
      * 
-     * @param shader the shader
+     * @param shader
+     *            the shader
      */
     @Override
     public void unbind(final ShaderProgram shader) {
@@ -183,8 +200,9 @@ public class VertexArrayEmulator implements VertexData {
         } else {
             for (int i = 0; i < numAttributes; i++) {
                 final int location = locations[i];
-                if (location >= 0)
+                if (location >= 0) {
                     shader.disableVertexAttribute(location);
+                }
             }
         }
         gl.glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
@@ -207,6 +225,5 @@ public class VertexArrayEmulator implements VertexData {
         gl.glBindBuffer(GL20.GL_ARRAY_BUFFER, 0);
         gl.glDeleteBuffer(bufferHandle);
         bufferHandle = 0;
-        BufferUtils.disposeUnsafeByteBuffer(byteBuffer);
     }
 }

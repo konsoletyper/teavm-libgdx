@@ -22,6 +22,8 @@ import org.teavm.dom.browser.Window;
 import org.teavm.dom.typedarrays.*;
 import org.teavm.dom.webgl.*;
 import org.teavm.jso.JS;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSFunctor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
@@ -55,9 +57,16 @@ public class TeaVMGL20 implements GL20 {
     final WebGLRenderingContext gl;
 
     protected TeaVMGL20(WebGLRenderingContext gl) {
-        this.gl = gl;
+        this.gl = wrapContext(gl);
         this.gl.pixelStorei(WebGLRenderingContext.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
     }
+
+    @JSBody(params = "context", script =
+            "if (typeof(WebGLDebugUtils) == 'undefined') {" +
+                "return context;" +
+            "}" +
+            "return WebGLDebugUtils.makeDebugContext(context);")
+    private static native WebGLRenderingContext wrapContext(WebGLRenderingContext context);
 
     private void ensureCapacity(FloatBuffer buffer) {
         if (buffer.remaining() > floatBuffer.getLength()) {
