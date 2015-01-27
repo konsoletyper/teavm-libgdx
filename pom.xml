@@ -109,7 +109,7 @@
         <configuration>
           <webResources>
             <resource>
-              <directory>${project.build.directory}/generated/js</directory>
+              <directory>${project.build.directory}/generated</directory>
             </resource>
           </webResources>
         </configuration>
@@ -126,13 +126,18 @@
               <goal>build-javascript</goal>
             </goals>
             <configuration>
-              <targetDirectory>${project.build.directory}/generated/js/teavm</targetDirectory>
+              <targetDirectory>${project.build.directory}/generated/teavm</targetDirectory>
               <mainClass>com.badlogic.invaders.teavm.TeaVMLauncher</mainClass>
               <runtime>SEPARATE</runtime>
               <minifying>false</minifying>
               <debugInformationGenerated>true</debugInformationGenerated>
               <sourceMapsGenerated>true</sourceMapsGenerated>
               <sourceFilesCopied>true</sourceFilesCopied>
+              <properties>
+                <teavm.libgdx.genAssetsDirectory>${project.build.directory}/generated/assets</teavm.libgdx.genAssetsDirectory>
+                <teavm.libgdx.warAssetsDirectory>${basedir}/src/main/webapp/assets</teavm.libgdx.warAssetsDirectory>
+                <teavm.libgdx.fsJsonPath>${project.build.directory}/generated/filesystem.json</teavm.libgdx.fsJsonPath>
+              </properties>
             </configuration>
           </execution>
         </executions>

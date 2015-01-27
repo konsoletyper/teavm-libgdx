@@ -1,4 +1,4 @@
-package org.teavm.libgdx.servlet;
+package org.teavm.libgdx.plugin;
 
 import java.util.ArrayList;
 import java.util.List;

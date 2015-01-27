@@ -24,7 +24,7 @@ public class VertexArrayEmulator implements VertexData {
     }
 
     /** Constructs a new interleaved VertexArray
-     * 
+     *
      * @param numVertices the maximum number of vertices
      * @param attributes the {@link VertexAttributes} */
     public VertexArrayEmulator(int numVertices, VertexAttributes attributes) {
@@ -33,7 +33,7 @@ public class VertexArrayEmulator implements VertexData {
 
     /**
      * Constructs a new interleaved VertexBufferObject.
-     * 
+     *
      * @param isStatic
      *            whether the vertex data is static.
      * @param numVertices
@@ -47,7 +47,7 @@ public class VertexArrayEmulator implements VertexData {
 
     /**
      * Constructs a new interleaved VertexBufferObject.
-     * 
+     *
      * @param isStatic
      *            whether the vertex data is static.
      * @param numVertices
@@ -115,14 +115,14 @@ public class VertexArrayEmulator implements VertexData {
     /**
      * Binds this VertexBufferObject for rendering via glDrawArrays or
      * glDrawElements
-     * 
+     *
      * @param shader
      *            the shader
      */
     /**
      * Binds this VertexBufferObject for rendering via glDrawArrays or
      * glDrawElements
-     * 
+     *
      * @param shader
      *            the shader
      */
@@ -180,7 +180,7 @@ public class VertexArrayEmulator implements VertexData {
 
     /**
      * Unbinds this VertexBufferObject.
-     * 
+     *
      * @param shader
      *            the shader
      */
@@ -213,6 +213,7 @@ public class VertexArrayEmulator implements VertexData {
      * Invalidates the VertexBufferObject so a new OpenGL buffer handle is
      * created. Use this in case of a context loss.
      */
+    @Override
     public void invalidate() {
         bufferHandle = Gdx.gl20.glGenBuffer();
         isDirty = true;

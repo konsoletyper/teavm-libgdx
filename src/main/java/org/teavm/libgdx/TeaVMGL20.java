@@ -23,7 +23,6 @@ import org.teavm.dom.typedarrays.*;
 import org.teavm.dom.webgl.*;
 import org.teavm.jso.JS;
 import org.teavm.jso.JSBody;
-import org.teavm.jso.JSFunctor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 

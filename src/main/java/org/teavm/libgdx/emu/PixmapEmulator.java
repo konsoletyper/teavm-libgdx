@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import java.nio.ByteBuffer;
@@ -39,7 +38,7 @@ import org.teavm.jso.JS;
 import org.teavm.libgdx.TeaVMFileHandle;
 
 /**
- * 
+ *
  * @author Alexey Andreev
  */
 public class PixmapEmulator implements Disposable {

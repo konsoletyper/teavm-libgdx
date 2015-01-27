@@ -17,7 +17,7 @@ public class IndexArrayEmulator implements IndexData {
 
     /**
      * Creates a new IndexBufferObject.
-     * 
+     *
      * @param isStatic
      *            whether the index buffer is static
      * @param maxIndices
@@ -33,7 +33,7 @@ public class IndexArrayEmulator implements IndexData {
 
     /**
      * Creates a new IndexBufferObject to be used with vertex arrays.
-     * 
+     *
      * @param maxIndices
      *            the maximum number of indices this buffer can hold
      */
@@ -46,11 +46,13 @@ public class IndexArrayEmulator implements IndexData {
     }
 
     /** @return the number of indices currently stored in this buffer */
+    @Override
     public int getNumIndices() {
         return buffer.limit();
     }
 
     /** @return the maximum number of indices this IndexBufferObject can store. */
+    @Override
     public int getNumMaxIndices() {
         return buffer.capacity();
     }
@@ -61,12 +63,12 @@ public class IndexArrayEmulator implements IndexData {
      * The count must equal the number of indices to be copied to this
      * IndexBufferObject.
      * </p>
-     * 
+     *
      * <p>
      * This can be called in between calls to {@link #bind()} and
      * {@link #unbind()}. The index data will be updated instantly.
      * </p>
-     * 
+     *
      * @param indices
      *            the vertex data
      * @param offset
@@ -74,6 +76,7 @@ public class IndexArrayEmulator implements IndexData {
      * @param count
      *            the number of shorts to copy
      */
+    @Override
     public void setIndices(short[] indices, int offset, int count) {
         isDirty = true;
         buffer.clear();
@@ -86,6 +89,7 @@ public class IndexArrayEmulator implements IndexData {
         }
     }
 
+    @Override
     public void setIndices(ShortBuffer indices) {
         isDirty = true;
         buffer.clear();
@@ -104,15 +108,17 @@ public class IndexArrayEmulator implements IndexData {
      * they wil be uploaded on the call to {@link #bind()}. If you need
      * immediate uploading use {@link #setIndices(short[], int, int)}.
      * </p>
-     * 
+     *
      * @return the underlying short buffer.
      */
+    @Override
     public ShortBuffer getBuffer() {
         isDirty = true;
         return buffer;
     }
 
     /** Binds this IndexBufferObject for rendering with glDrawElements. */
+    @Override
     public void bind() {
         if (bufferHandle == 0)
             throw new GdxRuntimeException("No buffer allocated!");
@@ -126,6 +132,7 @@ public class IndexArrayEmulator implements IndexData {
     }
 
     /** Unbinds this IndexBufferObject. */
+    @Override
     public void unbind() {
         Gdx.gl20.glBindBuffer(GL20.GL_ELEMENT_ARRAY_BUFFER, 0);
         isBound = false;
@@ -135,12 +142,14 @@ public class IndexArrayEmulator implements IndexData {
      * Invalidates the IndexBufferObject so a new OpenGL buffer handle is
      * created. Use this in case of a context loss.
      */
+    @Override
     public void invalidate() {
         bufferHandle = Gdx.gl20.glGenBuffer();
         isDirty = true;
     }
 
     /** Disposes this IndexBufferObject and all its associated OpenGL resources. */
+    @Override
     public void dispose() {
         GL20 gl = Gdx.gl20;
         gl.glBindBuffer(GL20.GL_ELEMENT_ARRAY_BUFFER, 0);
