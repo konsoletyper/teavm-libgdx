@@ -396,7 +396,7 @@ public class TeaVMInput implements Input, EventListener {
             if (e.getTarget() != canvas || touched[0]) {
                 float mouseX = getRelativeX(mouseEvent, canvas);
                 float mouseY = getRelativeY(mouseEvent, canvas);
-                if (mouseX < 0 || mouseX > Gdx.graphics.getWidth() || mouseY < 0 ||mouseY > Gdx.graphics.getHeight()) {
+                if (mouseX < 0 || mouseX > Gdx.graphics.getWidth() || mouseY < 0 || mouseY > Gdx.graphics.getHeight()) {
 
                     hasFocus = false;
                 }
@@ -494,9 +494,10 @@ public class TeaVMInput implements Input, EventListener {
 
         if (e.getType().equals("keypress") && hasFocus) {
             KeyboardEvent keyEvent = (KeyboardEvent)e;
-            char c = keyEvent.getKey().charAt(0);
-            if (processor != null)
-                processor.keyTyped(c);
+            int c = keyEvent.getCharCode();
+            if (processor != null) {
+                processor.keyTyped((char)c);
+            }
         }
 
         if (e.getType().equals("keyup") && hasFocus) {

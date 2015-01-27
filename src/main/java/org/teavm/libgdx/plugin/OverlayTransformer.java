@@ -47,7 +47,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.glutils.IndexArray;
+import com.badlogic.gdx.graphics.glutils.IndexBufferObject;
 import com.badlogic.gdx.graphics.glutils.VertexArray;
+import com.badlogic.gdx.graphics.glutils.VertexBufferObject;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.BufferUtils;
 
@@ -68,9 +70,11 @@ public class OverlayTransformer implements ClassHolderTransformer {
             transformControllers(cls, innerSource);
         } else if (cls.getName().equals(Matrix4.class.getName())) {
             transformMatrix(cls, innerSource);
-        } else if (cls.getName().equals(VertexArray.class.getName())) {
+        } else if (cls.getName().equals(VertexArray.class.getName()) ||
+                cls.getName().equals(VertexBufferObject.class.getName())) {
             replaceClass(cls, innerSource.get(VertexArrayEmulator.class.getName()));
-        } else if (cls.getName().equals(IndexArray.class.getName())) {
+        } else if (cls.getName().equals(IndexArray.class.getName()) ||
+                cls.getName().equals(IndexBufferObject.class.getName())) {
             replaceClass(cls, innerSource.get(IndexArrayEmulator.class.getName()));
         }
         transformer.transformClass(cls, innerSource, diagnostics);

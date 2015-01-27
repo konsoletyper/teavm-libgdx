@@ -129,7 +129,7 @@
               <targetDirectory>${project.build.directory}/generated/teavm</targetDirectory>
               <mainClass>com.badlogic.invaders.teavm.TeaVMLauncher</mainClass>
               <runtime>SEPARATE</runtime>
-              <minifying>false</minifying>
+              <minifying>true</minifying>
               <debugInformationGenerated>true</debugInformationGenerated>
               <sourceMapsGenerated>true</sourceMapsGenerated>
               <sourceFilesCopied>true</sourceFilesCopied>
