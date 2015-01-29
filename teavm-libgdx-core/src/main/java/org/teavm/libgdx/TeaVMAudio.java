@@ -25,11 +25,11 @@ public class TeaVMAudio implements Audio {
 
     @Override
     public Sound newSound(FileHandle fileHandle) {
-        return new TeaVMSound();
+        return new TeaVMSound((TeaVMFileHandle)fileHandle);
     }
 
     @Override
     public Music newMusic(FileHandle file) {
-        return new TeaVMMusic();
+        return new TeaVMMusic((TeaVMFileHandle)file);
     }
 }

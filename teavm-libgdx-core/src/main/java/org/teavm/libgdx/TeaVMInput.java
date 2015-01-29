@@ -494,9 +494,10 @@ public class TeaVMInput implements Input, EventListener {
 
         if (e.getType().equals("keypress") && hasFocus) {
             KeyboardEvent keyEvent = (KeyboardEvent)e;
-            char c = keyEvent.getKey().charAt(0);
-            if (processor != null)
+            char c = (char)keyEvent.getCharCode();
+            if (processor != null) {
                 processor.keyTyped(c);
+            }
         }
 
         if (e.getType().equals("keyup") && hasFocus) {
