@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -90,11 +91,25 @@ public class AssetsCopier implements RendererListener {
         }
 
         for (String resourceToCopy : resourcesToCopy) {
+            File resource = new File(dir, resourceToCopy);
+            if (resource.exists()) {
+                URL url = context.getClassLoader().getResource(resourceToCopy);
+                if (url != null && url.getProtocol().equals("file")) {
+                    try {
+                        File sourceFile = new File(url.toURI());
+                        if (sourceFile.exists() && sourceFile.length() == resource.length() &&
+                                sourceFile.lastModified() == resource.lastModified()) {
+                            continue;
+                        }
+                    } catch (URISyntaxException e) {
+                        // fall back to usual resource copying
+                    }
+                }
+            }
             InputStream input = context.getClassLoader().getResourceAsStream(resourceToCopy);
             if (input == null) {
                 continue;
             }
-            File resource = new File(dir, resourceToCopy);
             resource.getParentFile().mkdirs();
             IOUtils.copy(input, new FileOutputStream(resource));
         }
