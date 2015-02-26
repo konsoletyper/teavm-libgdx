@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.teavm.javascript.RenderingContext;
-import org.teavm.model.ClassReader;
 import org.teavm.vm.BuildTarget;
 import org.teavm.vm.spi.RendererListener;
 
@@ -43,14 +42,6 @@ public class AssetsCopier implements RendererListener {
     @Override
     public void begin(RenderingContext context, BuildTarget buildTarget) throws IOException {
         this.context = context;
-    }
-
-    @Override
-    public void beforeClass(ClassReader cls) throws IOException {
-    }
-
-    @Override
-    public void afterClass(ClassReader cls) throws IOException {
     }
 
     @Override

@@ -33,7 +33,7 @@ import org.teavm.dom.html.HTMLDocument;
 import org.teavm.dom.html.HTMLImageElement;
 import org.teavm.dom.typedarrays.ArrayBuffer;
 import org.teavm.dom.typedarrays.Uint8ClampedArray;
-import org.teavm.javascript.ni.GeneratedBy;
+import org.teavm.javascript.spi.GeneratedBy;
 import org.teavm.jso.JS;
 import org.teavm.libgdx.TeaVMFileHandle;
 
