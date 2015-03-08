@@ -2,7 +2,7 @@ package org.teavm.libgdx;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public interface TeaVMFilePreloadListener {
     void error();

@@ -9,7 +9,7 @@ import com.badlogic.gdx.audio.Music;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TeaVMMusic implements Music {
     private static Window window = (Window)JS.getGlobal();

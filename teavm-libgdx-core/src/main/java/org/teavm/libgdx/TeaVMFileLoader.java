@@ -14,7 +14,7 @@ import org.teavm.libgdx.TeaVMFileHandle.FSEntry;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TeaVMFileLoader {
     private static final Window window = (Window)JS.getGlobal();

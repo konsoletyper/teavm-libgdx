@@ -2,7 +2,7 @@ package org.teavm.libgdx.controllers.support;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public interface GamepadSupportListener {
     public void onGamepadConnected(int index);

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TeaVMAudio implements Audio {
     @Override

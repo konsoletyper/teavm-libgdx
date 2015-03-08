@@ -2,7 +2,7 @@ package org.teavm.libgdx;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class KeyCodes {
     public static final int KEY_ALT = 18;

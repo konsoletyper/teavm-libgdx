@@ -6,7 +6,7 @@ import org.teavm.jso.JSObject;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public interface Gamepad extends JSObject {
     String getId();

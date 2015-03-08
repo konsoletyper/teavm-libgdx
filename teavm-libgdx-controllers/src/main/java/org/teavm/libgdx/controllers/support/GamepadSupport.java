@@ -9,7 +9,7 @@ import org.teavm.jso.*;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class GamepadSupport {
     private static Window window = (Window)JS.getGlobal();

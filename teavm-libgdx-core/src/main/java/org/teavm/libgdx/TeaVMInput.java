@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.IntSet;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TeaVMInput implements Input, EventListener {
     static final int MAX_TOUCHES = 20;

@@ -4,7 +4,7 @@ import com.badlogic.gdx.controllers.PovDirection;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TeaVMControllerEvent {
 

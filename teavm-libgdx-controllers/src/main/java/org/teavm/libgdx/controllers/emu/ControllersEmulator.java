@@ -8,7 +8,7 @@ import org.teavm.libgdx.controllers.TeaVMControllers;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class ControllersEmulator {
     static final ObjectMap<Application, ControllerManager> managers = new ObjectMap<>();

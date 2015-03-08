@@ -15,7 +15,7 @@ import org.teavm.libgdx.controllers.support.GamepadSupportListener;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TeaVMControllers implements ControllerManager, GamepadSupportListener {
     private final IntMap<TeaVMController> controllerMap = new IntMap<>();

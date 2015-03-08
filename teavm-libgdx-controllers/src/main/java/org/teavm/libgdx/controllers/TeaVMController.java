@@ -11,7 +11,7 @@ import org.teavm.libgdx.controllers.support.GamepadSupport;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TeaVMController implements Controller{
     private int index;

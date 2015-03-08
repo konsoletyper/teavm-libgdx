@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 public class TeaVMSound implements Sound {
     private TeaVMFileHandle file;

@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  *
- * @author Alexey Andreev <konsoletyper@gmail.com>
+ * @author Alexey Andreev
  */
 
 public class FileDescriptor {
