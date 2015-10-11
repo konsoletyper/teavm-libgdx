@@ -1,7 +1,5 @@
 package org.teavm.libgdx;
 
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Music.OnCompletionListener;
 import com.badlogic.gdx.audio.Sound;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,11 +56,9 @@ public class TeaVMSound implements Sound {
         instance.setVolume(volume);
         instance.setPan(pan, volume);
         instance.setLooping(loop);
-        instance.setOnCompletionListener(new OnCompletionListener() {
-            @Override public void onCompletion(Music music) {
-                instances.remove(id);
-                instance.dispose();
-            }
+        instance.setOnCompletionListener(music -> {
+            instances.remove(id);
+            instance.dispose();
         });
         instances.put(id, instance);
         instance.play();

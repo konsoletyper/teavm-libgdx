@@ -18,14 +18,13 @@ package org.teavm.libgdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
-import org.teavm.dom.browser.Screen;
-import org.teavm.dom.browser.Window;
-import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.dom.webgl.WebGLContextAttributes;
-import org.teavm.dom.webgl.WebGLContextAttributesFactory;
-import org.teavm.dom.webgl.WebGLRenderingContext;
-import org.teavm.jso.JS;
-import org.teavm.jso.JSStringArrayReader;
+import org.teavm.jso.browser.Screen;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArrayReader;
+import org.teavm.jso.core.JSString;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.webgl.WebGLContextAttributes;
+import org.teavm.jso.webgl.WebGLRenderingContext;
 
 /**
  *
@@ -47,8 +46,7 @@ public class TeaVMGraphics implements Graphics {
         this.element = element;
         this.config = config;
 
-        WebGLContextAttributesFactory attrFactory = (WebGLContextAttributesFactory)JS.getGlobal();
-        WebGLContextAttributes attr = attrFactory.createWebGLContextAttributes();
+        WebGLContextAttributes attr = WebGLContextAttributes.create();
         attr.setAlpha(config.isAlphaEnabled());
         attr.setAntialias(config.isAntialiasEnabled());
         attr.setStencil(config.isStencilEnabled());
@@ -142,8 +140,7 @@ public class TeaVMGraphics implements Graphics {
 
     @Override
     public DisplayMode[] getDisplayModes() {
-        Window window = (Window)JS.getGlobal();
-        Screen screen = window.getScreen();
+        Screen screen = Window.current().getScreen();
         return new DisplayMode[] { new DisplayMode(screen.getWidth(), screen.getHeight(), 60, 8) {}};
     }
 
@@ -177,9 +174,9 @@ public class TeaVMGraphics implements Graphics {
 
     @Override
     public boolean supportsExtension(String extension) {
-        JSStringArrayReader array = context.getSupportedExtensions();
+        JSArrayReader<JSString> array = context.getSupportedExtensions();
         for (int i = 0; i < array.getLength(); ++i) {
-            if (array.get(i).equals(extension)) {
+            if (array.get(i).stringValue().equals(extension)) {
                 return true;
             }
         }

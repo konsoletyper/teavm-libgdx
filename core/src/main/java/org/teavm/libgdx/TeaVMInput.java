@@ -1,20 +1,23 @@
 package org.teavm.libgdx;
 
-import org.teavm.dom.events.*;
-import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.dom.html.HTMLDocument;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.IntSet;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
+import org.teavm.jso.dom.events.KeyboardEvent;
+import org.teavm.jso.dom.events.MouseEvent;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLDocument;
 
 /**
  *
  * @author Alexey Andreev
  */
-public class TeaVMInput implements Input, EventListener {
+public class TeaVMInput implements Input, EventListener<Event> {
     static final int MAX_TOUCHES = 20;
     boolean justTouched = false;
     private IntMap<Integer> touchMap = new IntMap<>(20);

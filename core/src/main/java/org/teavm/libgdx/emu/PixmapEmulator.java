@@ -16,7 +16,9 @@
 package org.teavm.libgdx.emu;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
 import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -26,15 +28,13 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import org.teavm.dom.browser.Window;
-import org.teavm.dom.canvas.CanvasRenderingContext2D;
-import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.dom.html.HTMLDocument;
-import org.teavm.dom.html.HTMLImageElement;
-import org.teavm.dom.typedarrays.ArrayBuffer;
-import org.teavm.dom.typedarrays.Uint8ClampedArray;
 import org.teavm.javascript.spi.GeneratedBy;
-import org.teavm.jso.JS;
+import org.teavm.jso.canvas.CanvasRenderingContext2D;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLImageElement;
+import org.teavm.jso.typedarrays.ArrayBuffer;
+import org.teavm.jso.typedarrays.Uint8ClampedArray;
 import org.teavm.libgdx.TeaVMFileHandle;
 
 /**
@@ -42,8 +42,6 @@ import org.teavm.libgdx.TeaVMFileHandle;
  * @author Alexey Andreev
  */
 public class PixmapEmulator implements Disposable {
-    private static final Window window = (Window) JS.getGlobal();
-    private static final HTMLDocument document = window.getDocument();
     public static Map<Integer, PixmapEmulator> pixmaps = new HashMap<>();
     static int nextId = 0;
     int width;
@@ -87,9 +85,9 @@ public class PixmapEmulator implements Disposable {
         this.width = width;
         this.height = height;
         this.format = Format.RGBA8888;
-        canvas = (HTMLCanvasElement) document.createElement("canvas");
+        canvas = (HTMLCanvasElement) HTMLDocument.current().createElement("canvas");
         canvas.getStyle().setProperty("display", "none");
-        document.getBody().appendChild(canvas);
+        HTMLDocument.current().getBody().appendChild(canvas);
         canvas.setWidth(width);
         canvas.setHeight(height);
         context = (CanvasRenderingContext2D) canvas.getContext("2d");
