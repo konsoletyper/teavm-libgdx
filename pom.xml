@@ -9,8 +9,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.7</java.version>
-    <teavm.version>0.3.1</teavm.version>
+    <java.version>1.8</java.version>
+    <teavm.version>0.4.0-SNAPSHOT</teavm.version>
     <jackson.version>2.5.0</jackson.version>
     <gdx.version>1.5.3</gdx.version>
   </properties>
@@ -41,7 +41,7 @@
       </dependency>
       <dependency>
         <groupId>org.teavm</groupId>
-        <artifactId>teavm-dom</artifactId>
+        <artifactId>teavm-jso-apis</artifactId>
         <version>${teavm.version}</version>
       </dependency>
 

@@ -1,18 +1,17 @@
 package org.teavm.libgdx.controllers.support;
 
 import com.badlogic.gdx.utils.IntMap;
-import org.teavm.dom.browser.TimerHandler;
-import org.teavm.dom.browser.Window;
-import org.teavm.dom.events.Event;
-import org.teavm.dom.events.EventListener;
-import org.teavm.jso.*;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSProperty;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.dom.events.Event;
 
 /**
  *
  * @author Alexey Andreev
  */
 public class GamepadSupport {
-    private static Window window = (Window)JS.getGlobal();
     private static GamepadSupportListener listener;
     private static IntMap<Gamepad> gamepads = new IntMap<>();
     private static IntMap<Gamepad> gamepadsTemp = new IntMap<>();
@@ -21,17 +20,13 @@ public class GamepadSupport {
     public static void init(GamepadSupportListener listener) {
         GamepadSupport.listener = listener;
         if (isGamepardSupportAvailable()) {
-            window.addEventListener("MozGamepadConnected", new EventListener() {
-                @Override public void handleEvent(Event evt) {
-                    GamepadEvent gamepadEvent = (GamepadEvent)evt;
-                    handleGamepadConnect(gamepadEvent);
-                }
+            Window.current().addEventListener("MozGamepadConnected", evt -> {
+                GamepadEvent gamepadEvent = (GamepadEvent)evt;
+                handleGamepadConnect(gamepadEvent);
             });
-            window.addEventListener("MozGamepadDisconnected", new EventListener() {
-                @Override public void handleEvent(Event evt) {
-                    GamepadEvent gamepadEvent = (GamepadEvent)evt;
-                    handleGamepadDisconnect(gamepadEvent);
-                }
+            Window.current().addEventListener("MozGamepadDisconnected", evt -> {
+                GamepadEvent gamepadEvent = (GamepadEvent)evt;
+                handleGamepadDisconnect(gamepadEvent);
             });
             if (shouldStartPolling()) {
                 startPolling();
@@ -44,16 +39,12 @@ public class GamepadSupport {
             return;
         }
         consoleLog("startPolling");
-        timerId = window.setInterval(new TimerHandler() {
-            @Override
-            public void onTimer() {
-            }
-        }, 100);
+        timerId = Window.setInterval(() -> { }, 100);
     }
 
     public static void stopPolling() {
         if (timerId < 0) {
-            window.clearInterval(timerId);
+            Window.clearInterval(timerId);
             timerId = -1;
         }
     }

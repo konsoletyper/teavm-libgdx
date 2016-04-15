@@ -1,8 +1,8 @@
 package org.teavm.libgdx.controllers.support;
 
-import org.teavm.jso.JSDoubleArray;
-import org.teavm.jso.JSIntArray;
 import org.teavm.jso.JSObject;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSNumber;
 
 /**
  *
@@ -15,9 +15,9 @@ public interface Gamepad extends JSObject {
 
     double getTimestamp();
 
-    JSDoubleArray getAxes();
+    JSArray<JSNumber> getAxes();
 
-    JSIntArray getButtons();
+    JSArray<JSNumber> getButtons();
 
     double getPreviousTimestamp();
 

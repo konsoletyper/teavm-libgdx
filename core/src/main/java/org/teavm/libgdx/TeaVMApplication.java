@@ -1,12 +1,5 @@
 package org.teavm.libgdx;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.teavm.dom.browser.TimerHandler;
-import org.teavm.dom.browser.Window;
-import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.jso.JS;
-import org.teavm.jso.JSBody;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Audio;
@@ -18,9 +11,14 @@ import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Clipboard;
+import java.util.ArrayList;
+import java.util.List;
+import org.teavm.jso.JSBody;
+import org.teavm.jso.browser.TimerHandler;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
 
 public class TeaVMApplication implements Application {
-    private Window window = (Window)JS.getGlobal();
     private ApplicationListener listener;
     private TeaVMApplicationConfig config;
     private HTMLCanvasElement canvas;
@@ -67,7 +65,7 @@ public class TeaVMApplication implements Application {
     }
 
     private void delayedStep() {
-        window.setTimeout(new TimerHandler() {
+        Window.setTimeout(new TimerHandler() {
             @Override public void onTimer() {
                 step();
             }

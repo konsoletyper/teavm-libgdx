@@ -53,13 +53,13 @@
             <id>web-client</id>
             <phase>prepare-package</phase>
             <goals>
-              <goal>build-javascript</goal>
+              <goal>compile</goal>
             </goals>
             <configuration>
               <targetDirectory>${project.build.directory}/generated/teavm</targetDirectory>
               <mainClass>org.teavm.libgdx.invaders.TeaVMLauncher</mainClass>
               <runtime>SEPARATE</runtime>
-              <minifying>true</minifying>
+              <minifying>false</minifying>
               <debugInformationGenerated>true</debugInformationGenerated>
               <sourceMapsGenerated>true</sourceMapsGenerated>
               <sourceFilesCopied>true</sourceFilesCopied>

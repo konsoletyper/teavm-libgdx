@@ -18,9 +18,17 @@ package org.teavm.libgdx;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import java.io.*;
-import java.util.*;
-import org.teavm.dom.html.HTMLImageElement;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.teavm.jso.dom.html.HTMLImageElement;
 
 /**
  *

@@ -2,14 +2,15 @@ package org.teavm.libgdx;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-import org.teavm.dom.ajax.ReadyStateChangeHandler;
-import org.teavm.dom.ajax.XMLHttpRequest;
-import org.teavm.dom.browser.Window;
-import org.teavm.dom.events.Event;
-import org.teavm.dom.events.EventListener;
-import org.teavm.dom.html.HTMLImageElement;
-import org.teavm.jso.JS;
-import org.teavm.jso.JSArrayReader;
+import org.teavm.jso.ajax.ReadyStateChangeHandler;
+import org.teavm.jso.ajax.XMLHttpRequest;
+import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArrayReader;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
+import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLImageElement;
+import org.teavm.jso.json.JSON;
 import org.teavm.libgdx.TeaVMFileHandle.FSEntry;
 
 /**
@@ -17,8 +18,7 @@ import org.teavm.libgdx.TeaVMFileHandle.FSEntry;
  * @author Alexey Andreev
  */
 public class TeaVMFileLoader {
-    private static final Window window = (Window)JS.getGlobal();
-    private static final XMLHttpRequest xhr = window.createXMLHttpRequest();
+    private static final XMLHttpRequest xhr = XMLHttpRequest.create();
 
     public static void loadFiles(final TeaVMFilePreloadListener listener) {
         xhr.setOnReadyStateChange(new ReadyStateChangeHandler() {
@@ -75,21 +75,21 @@ public class TeaVMFileLoader {
 
     private static void loadDescription(Queue<Task> tasks) {
         @SuppressWarnings("unchecked")
-        JSArrayReader<FileDescriptor> rootFiles = (JSArrayReader<FileDescriptor>)window.getJSON()
-                .parse(xhr.getResponseText());
-        initEntry(TeaVMFileHandle.root, JS.iterate(rootFiles), "assets", tasks);
+        JSArrayReader<FileDescriptor> rootFiles = (JSArrayReader<FileDescriptor>) JSON.parse(xhr.getResponseText());
+        initEntry(TeaVMFileHandle.root, rootFiles, "assets", tasks);
     }
 
-    private static void initEntry(FSEntry parent, Iterable<FileDescriptor> descList, String fullPath,
+    private static void initEntry(FSEntry parent, JSArrayReader<FileDescriptor> descList, String fullPath,
             Queue<Task> tasks) {
-        for (FileDescriptor fileDesc : descList) {
+        for (int i = 0; i < descList.getLength(); ++i) {
+            FileDescriptor fileDesc = descList.get(i);
             final FSEntry entry = new FSEntry();
             String name = fileDesc.getName();
             entry.directory = fileDesc.isDirectory();
             parent.childEntries.put(name, entry);
             final String entryPath = fullPath + "/" + name;
             if (entry.directory) {
-                initEntry(entry, JS.iterate(fileDesc.getChildFiles()), entryPath, tasks);
+                initEntry(entry, fileDesc.getChildFiles(), entryPath, tasks);
             } else {
                 tasks.add(new LoadFileTask(entry, entryPath));
                 if (name.endsWith(".png") || name.endsWith("jpeg") || name.endsWith("jpg") ||
@@ -134,7 +134,7 @@ public class TeaVMFileLoader {
         }
     }
 
-    private static class LoadImageTask implements Task, EventListener {
+    private static class LoadImageTask implements Task, EventListener<Event> {
         FSEntry entry;
         String path;
         TaskHandler handler;
@@ -145,8 +145,9 @@ public class TeaVMFileLoader {
         @Override
         public void run(TaskHandler handler) {
             this.handler = handler;
-            HTMLImageElement image = (HTMLImageElement)window.getDocument().createElement("img");
-            window.getDocument().getBody().appendChild(image);
+            HTMLDocument document = Window.current().getDocument();
+            HTMLImageElement image = (HTMLImageElement) document.createElement("img");
+            document.getBody().appendChild(image);
             image.getStyle().setProperty("display", "none");
             image.setSrc(path);
             image.addEventListener("load", this);

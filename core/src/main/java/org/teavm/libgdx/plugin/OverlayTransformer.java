@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 import org.teavm.common.Mapper;
 import org.teavm.diagnostics.Diagnostics;
-import org.teavm.jso.plugin.JSObjectClassTransformer;
 import org.teavm.libgdx.emu.*;
 import org.teavm.model.*;
 import org.teavm.model.instructions.*;
@@ -31,8 +30,6 @@ import org.teavm.model.util.ModelUtils;
 import org.teavm.parsing.ClassRefsRenamer;
 
 public class OverlayTransformer implements ClassHolderTransformer {
-    private JSObjectClassTransformer transformer = new JSObjectClassTransformer();
-
     @Override
     public void transformClass(ClassHolder cls, ClassReaderSource innerSource, Diagnostics diagnostics) {
         if (cls.getName().equals(BufferUtils.class.getName())) {
@@ -52,7 +49,6 @@ public class OverlayTransformer implements ClassHolderTransformer {
                 cls.getName().equals(IndexBufferObject.class.getName())) {
             replaceClass(cls, innerSource.get(IndexArrayEmulator.class.getName()));
         }
-        transformer.transformClass(cls, innerSource, diagnostics);
     }
 
     private void transformBufferUtils(ClassHolder cls, ClassReaderSource innerSource) {
