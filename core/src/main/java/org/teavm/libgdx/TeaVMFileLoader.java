@@ -2,8 +2,8 @@ package org.teavm.libgdx;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-import org.teavm.dom.ajax.ReadyStateChangeHandler;
-import org.teavm.dom.ajax.XMLHttpRequest;
+import org.teavm.jso.ajax.ReadyStateChangeHandler;
+import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
