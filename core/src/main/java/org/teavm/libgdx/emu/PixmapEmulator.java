@@ -27,7 +27,7 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import org.teavm.jso.browser.Window;
-import org.teavm.dom.canvas.CanvasRenderingContext2D;
+import org.teavm.jso.canvas.CanvasRenderingContext2D;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLImageElement;
