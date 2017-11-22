@@ -29,7 +29,7 @@ import java.util.Map;
 import org.teavm.jso.browser.Window;
 import org.teavm.dom.canvas.CanvasRenderingContext2D;
 import org.teavm.dom.html.HTMLCanvasElement;
-import org.teavm.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.dom.html.HTMLImageElement;
 import org.teavm.dom.typedarrays.ArrayBuffer;
 import org.teavm.dom.typedarrays.Uint8ClampedArray;
