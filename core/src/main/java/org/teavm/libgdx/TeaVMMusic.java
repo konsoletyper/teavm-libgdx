@@ -1,8 +1,8 @@
 package org.teavm.libgdx;
 
 import org.teavm.jso.browser.Window;
-import org.teavm.dom.events.Event;
-import org.teavm.dom.events.EventListener;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.dom.html.HTMLAudioElement;
 import org.teavm.jso.JS;
 import com.badlogic.gdx.audio.Music;

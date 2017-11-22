@@ -3,8 +3,8 @@ package org.teavm.libgdx.controllers.support;
 import com.badlogic.gdx.utils.IntMap;
 import org.teavm.dom.browser.TimerHandler;
 import org.teavm.jso.browser.Window;
-import org.teavm.dom.events.Event;
-import org.teavm.dom.events.EventListener;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.*;
 
 /**
