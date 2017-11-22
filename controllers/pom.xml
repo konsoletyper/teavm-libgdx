@@ -26,7 +26,11 @@
     </dependency>
     <dependency>
       <groupId>org.teavm</groupId>
-      <artifactId>teavm-dom</artifactId>
+      <artifactId>teavm-jso-apis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.teavm</groupId>
+      <artifactId>teavm-jso-impl</artifactId>
     </dependency>
     <dependency>
       <groupId>com.badlogicgames.gdx</groupId>

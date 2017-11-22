@@ -7,8 +7,6 @@ import com.badlogic.gdx.controllers.ControllerManager;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.Pool;
-import org.teavm.jso.JSDoubleArray;
-import org.teavm.jso.JSIntArray;
 import org.teavm.libgdx.controllers.support.Gamepad;
 import org.teavm.libgdx.controllers.support.GamepadSupport;
 import org.teavm.libgdx.controllers.support.GamepadSupportListener;
@@ -143,12 +141,12 @@ public class TeaVMControllers implements ControllerManager, GamepadSupportListen
         TeaVMController controller = controllerMap.get(index);
         if (gamepad != null && controller != null) {
             // Determine what changed
-            JSDoubleArray axes = gamepad.getAxes();
-            JSIntArray buttons = gamepad.getButtons();
+            double[] axes = gamepad.getAxes();
+            int[] buttons = gamepad.getButtons();
             synchronized (eventQueue) {
-                for (int i = 0, j = axes.getLength(); i < j; i++) {
+                for (int i = 0, j = axes.length; i < j; i++) {
                     float oldAxis = controller.getAxis(i);
-                    float newAxis = (float)axes.get(i);
+                    float newAxis = (float)axes[i];
                     if (oldAxis != newAxis) {
                         TeaVMControllerEvent event = eventPool.obtain();
                         event.type = TeaVMControllerEvent.AXIS;
@@ -158,9 +156,9 @@ public class TeaVMControllers implements ControllerManager, GamepadSupportListen
                         eventQueue.add(event);
                     }
                 }
-                for (int i = 0, j = buttons.getLength(); i < j; i++) {
+                for (int i = 0, j = buttons.length; i < j; i++) {
                     float oldButton = controller.getButtonAmount(i);
-                    float newButton = buttons.get(i);
+                    float newButton = buttons[i];
                     if (oldButton != newButton) {
                         if ((oldButton < 0.5f && newButton < 0.5f) || (oldButton >= 0.5f && newButton >= 0.5f)) {
                             controller.buttons.put(i, newButton);

@@ -29,7 +29,7 @@ public class TeaVMController implements Controller{
         this.name = name;
 
         Gamepad gamepad = GamepadSupport.getGamepad(index);
-        axes = new float[gamepad.getAxes().getLength()];
+        axes = new float[gamepad.getAxes().length];
     }
 
     public int getIndex() {

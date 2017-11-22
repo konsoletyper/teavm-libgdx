@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 import org.teavm.common.Mapper;
 import org.teavm.diagnostics.Diagnostics;
-import org.teavm.jso.plugin.JSObjectClassTransformer;
 import org.teavm.libgdx.emu.*;
 import org.teavm.model.*;
 import org.teavm.model.instructions.*;
@@ -31,8 +30,6 @@ import org.teavm.model.util.ModelUtils;
 import org.teavm.parsing.ClassRefsRenamer;
 
 public class OverlayTransformer implements ClassHolderTransformer {
-    private JSObjectClassTransformer transformer = new JSObjectClassTransformer();
-
     @Override
     public void transformClass(ClassHolder cls, ClassReaderSource innerSource, Diagnostics diagnostics) {
         if (cls.getName().equals(BufferUtils.class.getName())) {
@@ -52,7 +49,6 @@ public class OverlayTransformer implements ClassHolderTransformer {
                 cls.getName().equals(IndexBufferObject.class.getName())) {
             replaceClass(cls, innerSource.get(IndexArrayEmulator.class.getName()));
         }
-        transformer.transformClass(cls, innerSource, diagnostics);
     }
 
     private void transformBufferUtils(ClassHolder cls, ClassReaderSource innerSource) {
@@ -139,15 +135,15 @@ public class OverlayTransformer implements ClassHolderTransformer {
         ConstructInstruction consInsn = new ConstructInstruction();
         consInsn.setReceiver(ex);
         consInsn.setType(UnsupportedOperationException.class.getName());
-        block.getInstructions().add(consInsn);
+        block.add(consInsn);
         InvokeInstruction initInsn = new InvokeInstruction();
         initInsn.setType(InvocationType.SPECIAL);
         initInsn.setInstance(ex);
         initInsn.setMethod(new MethodReference(UnsupportedOperationException.class, "<init>", void.class));
-        block.getInstructions().add(initInsn);
+        block.add(initInsn);
         RaiseInstruction raiseInsn = new RaiseInstruction();
         raiseInsn.setException(ex);
-        block.getInstructions().add(raiseInsn);
+        block.add(raiseInsn);
         return program;
     }
 
@@ -159,9 +155,9 @@ public class OverlayTransformer implements ClassHolderTransformer {
         superInitInsn.setType(InvocationType.SPECIAL);
         superInitInsn.setInstance(self);
         superInitInsn.setMethod(new MethodReference(Object.class, "<init>", void.class));
-        block.getInstructions().add(superInitInsn);
+        block.add(superInitInsn);
         ExitInstruction exitInsn = new ExitInstruction();
-        block.getInstructions().add(exitInsn);
+        block.add(exitInsn);
         return program;
     }
 

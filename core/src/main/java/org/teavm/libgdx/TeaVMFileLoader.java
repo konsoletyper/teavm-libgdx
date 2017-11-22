@@ -1,15 +1,17 @@
 package org.teavm.libgdx;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
 import org.teavm.jso.ajax.ReadyStateChangeHandler;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.Window;
+import org.teavm.jso.core.JSArrayReader;
 import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.html.HTMLImageElement;
-import org.teavm.jso.core.JSArrayReader;
+import org.teavm.jso.json.JSON;
 import org.teavm.libgdx.TeaVMFileHandle.FSEntry;
+
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 /**
  *
@@ -17,7 +19,7 @@ import org.teavm.libgdx.TeaVMFileHandle.FSEntry;
  */
 public class TeaVMFileLoader {
     private static final Window window = Window.current();
-    private static final XMLHttpRequest xhr = window.createXMLHttpRequest();
+    private static final XMLHttpRequest xhr = XMLHttpRequest.create();
 
     public static void loadFiles(final TeaVMFilePreloadListener listener) {
         xhr.setOnReadyStateChange(new ReadyStateChangeHandler() {
@@ -74,21 +76,21 @@ public class TeaVMFileLoader {
 
     private static void loadDescription(Queue<Task> tasks) {
         @SuppressWarnings("unchecked")
-        JSArrayReader<FileDescriptor> rootFiles = (JSArrayReader<FileDescriptor>)window.getJSON()
-                .parse(xhr.getResponseText());
-        initEntry(TeaVMFileHandle.root, JS.iterate(rootFiles), "assets", tasks);
+        JSArrayReader<FileDescriptor> rootFiles = (JSArrayReader<FileDescriptor>) JSON.parse(xhr.getResponseText());
+        initEntry(TeaVMFileHandle.root, rootFiles, "assets", tasks);
     }
 
-    private static void initEntry(FSEntry parent, Iterable<FileDescriptor> descList, String fullPath,
+    private static void initEntry(FSEntry parent, JSArrayReader<FileDescriptor> descList, String fullPath,
             Queue<Task> tasks) {
-        for (FileDescriptor fileDesc : descList) {
+        for (int i = 0; i < descList.getLength(); ++i) {
+            FileDescriptor fileDesc = descList.get(i);
             final FSEntry entry = new FSEntry();
             String name = fileDesc.getName();
             entry.directory = fileDesc.isDirectory();
             parent.childEntries.put(name, entry);
             final String entryPath = fullPath + "/" + name;
             if (entry.directory) {
-                initEntry(entry, JS.iterate(fileDesc.getChildFiles()), entryPath, tasks);
+                initEntry(entry, fileDesc.getChildFiles(), entryPath, tasks);
             } else {
                 tasks.add(new LoadFileTask(entry, entryPath));
                 if (name.endsWith(".png") || name.endsWith("jpeg") || name.endsWith("jpg") ||

@@ -25,7 +25,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
-import org.teavm.javascript.RenderingContext;
+import org.teavm.backend.javascript.rendering.RenderingManager;
 import org.teavm.vm.BuildTarget;
 import org.teavm.vm.spi.RendererListener;
 
@@ -34,13 +34,13 @@ import org.teavm.vm.spi.RendererListener;
  * @author Alexey Andreev
  */
 public class AssetsCopier implements RendererListener {
-    private RenderingContext context;
+    private RenderingManager context;
     private FileDescriptor rootFileDescriptor = new FileDescriptor();
     private ObjectMapper mapper = new ObjectMapper();
     private ObjectWriter writer = mapper.writerFor(FileDescriptor.class);
 
     @Override
-    public void begin(RenderingContext context, BuildTarget buildTarget) throws IOException {
+    public void begin(RenderingManager context, BuildTarget buildTarget) throws IOException {
         this.context = context;
     }
 
