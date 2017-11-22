@@ -21,7 +21,6 @@ import java.util.Map;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.typedarrays.*;
 import org.teavm.jso.webgl.*;
-import org.teavm.jso.JS;
 import org.teavm.jso.JSBody;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.GdxRuntimeException;

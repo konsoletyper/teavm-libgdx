@@ -24,7 +24,6 @@ import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.webgl.WebGLContextAttributes;
 import org.teavm.jso.webgl.WebGLContextAttributesFactory;
 import org.teavm.jso.webgl.WebGLRenderingContext;
-import org.teavm.jso.JS;
 import org.teavm.jso.JSStringArrayReader;
 
 /**
