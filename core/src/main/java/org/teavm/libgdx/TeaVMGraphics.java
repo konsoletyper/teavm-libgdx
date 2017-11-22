@@ -21,9 +21,9 @@ import com.badlogic.gdx.graphics.GL30;
 import org.teavm.dom.browser.Screen;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
-import org.teavm.dom.webgl.WebGLContextAttributes;
-import org.teavm.dom.webgl.WebGLContextAttributesFactory;
-import org.teavm.dom.webgl.WebGLRenderingContext;
+import org.teavm.jso.webgl.WebGLContextAttributes;
+import org.teavm.jso.webgl.WebGLContextAttributesFactory;
+import org.teavm.jso.webgl.WebGLRenderingContext;
 import org.teavm.jso.JS;
 import org.teavm.jso.JSStringArrayReader;
 
