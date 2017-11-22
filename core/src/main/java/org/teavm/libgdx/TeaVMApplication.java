@@ -2,7 +2,7 @@ package org.teavm.libgdx;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.teavm.dom.browser.TimerHandler;
+import org.teavm.jso.browser.TimerHandler;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.JS;
