@@ -19,7 +19,7 @@ import java.nio.*;
 import java.util.HashMap;
 import java.util.Map;
 import org.teavm.jso.browser.Window;
-import org.teavm.dom.typedarrays.*;
+import org.teavm.jso.typedarrays.*;
 import org.teavm.dom.webgl.*;
 import org.teavm.jso.JS;
 import org.teavm.jso.JSBody;
