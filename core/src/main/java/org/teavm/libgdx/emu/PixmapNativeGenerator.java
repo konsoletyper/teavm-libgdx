@@ -16,7 +16,7 @@
 package org.teavm.libgdx.emu;
 
 import java.io.IOException;
-import org.teavm.codegen.SourceWriter;
+import org.teavm.backend.javascript.codegen.SourceWriter;
 import org.teavm.backend.javascript.spi.Generator;
 import org.teavm.backend.javascript.spi.GeneratorContext;
 import org.teavm.model.MethodReference;
