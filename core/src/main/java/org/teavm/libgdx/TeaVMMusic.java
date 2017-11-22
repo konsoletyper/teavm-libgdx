@@ -1,6 +1,6 @@
 package org.teavm.libgdx;
 
-import org.teavm.dom.browser.Window;
+import org.teavm.jso.browser.Window;
 import org.teavm.dom.events.Event;
 import org.teavm.dom.events.EventListener;
 import org.teavm.dom.html.HTMLAudioElement;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.audio.Music;
  * @author Alexey Andreev
  */
 public class TeaVMMusic implements Music {
-    private static Window window = (Window)JS.getGlobal();
+    private static Window window = Window.current();
     private HTMLAudioElement element;
     private boolean started;
     private OnCompletionListener listener;

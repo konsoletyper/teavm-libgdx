@@ -18,7 +18,7 @@ package org.teavm.libgdx;
 import java.nio.*;
 import java.util.HashMap;
 import java.util.Map;
-import org.teavm.dom.browser.Window;
+import org.teavm.jso.browser.Window;
 import org.teavm.dom.typedarrays.*;
 import org.teavm.dom.webgl.*;
 import org.teavm.jso.JS;
@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
  * @author Alexey Andreev
  */
 public class TeaVMGL20 implements GL20 {
-    private static final Window window = (Window)JS.getGlobal();
+    private static final Window window = Window.current();
     final Map<Integer, WebGLProgram> programs = new HashMap<>();
     int nextProgramId = 1;
     final Map<Integer, WebGLShader> shaders = new HashMap<>();

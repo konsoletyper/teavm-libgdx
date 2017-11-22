@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import org.teavm.dom.ajax.ReadyStateChangeHandler;
 import org.teavm.dom.ajax.XMLHttpRequest;
-import org.teavm.dom.browser.Window;
+import org.teavm.jso.browser.Window;
 import org.teavm.dom.events.Event;
 import org.teavm.dom.events.EventListener;
 import org.teavm.dom.html.HTMLImageElement;
@@ -17,7 +17,7 @@ import org.teavm.libgdx.TeaVMFileHandle.FSEntry;
  * @author Alexey Andreev
  */
 public class TeaVMFileLoader {
-    private static final Window window = (Window)JS.getGlobal();
+    private static final Window window = Window.current();
     private static final XMLHttpRequest xhr = window.createXMLHttpRequest();
 
     public static void loadFiles(final TeaVMFilePreloadListener listener) {

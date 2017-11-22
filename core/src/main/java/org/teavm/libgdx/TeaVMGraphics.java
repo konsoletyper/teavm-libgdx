@@ -19,7 +19,7 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import org.teavm.dom.browser.Screen;
-import org.teavm.dom.browser.Window;
+import org.teavm.jso.browser.Window;
 import org.teavm.dom.html.HTMLCanvasElement;
 import org.teavm.dom.webgl.WebGLContextAttributes;
 import org.teavm.dom.webgl.WebGLContextAttributesFactory;
@@ -142,7 +142,7 @@ public class TeaVMGraphics implements Graphics {
 
     @Override
     public DisplayMode[] getDisplayModes() {
-        Window window = (Window)JS.getGlobal();
+        Window window = Window.current();
         Screen screen = window.getScreen();
         return new DisplayMode[] { new DisplayMode(screen.getWidth(), screen.getHeight(), 60, 8) {}};
     }

@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import org.teavm.dom.browser.Window;
+import org.teavm.jso.browser.Window;
 import org.teavm.dom.canvas.CanvasRenderingContext2D;
 import org.teavm.dom.html.HTMLCanvasElement;
 import org.teavm.dom.html.HTMLDocument;
@@ -42,7 +42,7 @@ import org.teavm.libgdx.TeaVMFileHandle;
  * @author Alexey Andreev
  */
 public class PixmapEmulator implements Disposable {
-    private static final Window window = (Window) JS.getGlobal();
+    private static final Window window = Window.current();
     private static final HTMLDocument document = window.getDocument();
     public static Map<Integer, PixmapEmulator> pixmaps = new HashMap<>();
     static int nextId = 0;

@@ -2,7 +2,7 @@ package org.teavm.libgdx.controllers.support;
 
 import com.badlogic.gdx.utils.IntMap;
 import org.teavm.dom.browser.TimerHandler;
-import org.teavm.dom.browser.Window;
+import org.teavm.jso.browser.Window;
 import org.teavm.dom.events.Event;
 import org.teavm.dom.events.EventListener;
 import org.teavm.jso.*;
@@ -12,7 +12,7 @@ import org.teavm.jso.*;
  * @author Alexey Andreev
  */
 public class GamepadSupport {
-    private static Window window = (Window)JS.getGlobal();
+    private static Window window = Window.current();
     private static GamepadSupportListener listener;
     private static IntMap<Gamepad> gamepads = new IntMap<>();
     private static IntMap<Gamepad> gamepadsTemp = new IntMap<>();
