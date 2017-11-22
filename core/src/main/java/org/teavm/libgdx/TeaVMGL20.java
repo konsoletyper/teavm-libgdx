@@ -47,9 +47,9 @@ public class TeaVMGL20 implements GL20 {
     int nextUniformId = 1;
     int currProgram = 0;
 
-    Float32Array floatBuffer = window.createFloat32Array(2000 * 20);
-    Int32Array intBuffer = window.createInt32Array(2000 * 6);
-    Int16Array shortBuffer = window.createInt16Array(2000 * 6);
+    Float32Array floatBuffer = Float32Array.create(2000 * 20);
+    Int32Array intBuffer = Int32Array.create(2000 * 6);
+    Int16Array shortBuffer = Int16Array.create(2000 * 6);
     float[] floatArray = new float[16000];
 
     final WebGLRenderingContext gl;
@@ -68,25 +68,25 @@ public class TeaVMGL20 implements GL20 {
 
     private void ensureCapacity(FloatBuffer buffer) {
         if (buffer.remaining() > floatBuffer.getLength()) {
-            floatBuffer = window.createFloat32Array(buffer.remaining());
+            floatBuffer = Float32Array.create(buffer.remaining());
         }
     }
 
     private void ensureCapacity(ShortBuffer buffer) {
         if (buffer.remaining() > shortBuffer.getLength()) {
-            shortBuffer = window.createInt16Array(buffer.remaining());
+            shortBuffer = Int16Array.create(buffer.remaining());
         }
     }
 
     private void ensureCapacity(IntBuffer buffer) {
         if (buffer.remaining() > intBuffer.getLength()) {
-            intBuffer = window.createInt32Array(buffer.remaining());
+            intBuffer = Int32Array.create(buffer.remaining());
         }
     }
 
     public Float32Array copy(FloatBuffer buffer) {
         buffer = buffer.duplicate();
-        Float32Array result = window.createFloat32Array(buffer.remaining());
+        Float32Array result = Float32Array.create(buffer.remaining());
         float[] tmp;
         if (buffer.hasArray()) {
             tmp = buffer.array();
@@ -102,7 +102,7 @@ public class TeaVMGL20 implements GL20 {
 
     public Float64Array copy(DoubleBuffer buffer) {
         buffer = buffer.duplicate();
-        Float64Array result = window.createFloat64Array(buffer.remaining());
+        Float64Array result = Float64Array.create(buffer.remaining());
         double[] tmp;
         if (buffer.hasArray()) {
             tmp = buffer.array();
@@ -118,7 +118,7 @@ public class TeaVMGL20 implements GL20 {
 
     public Int16Array copy(ShortBuffer buffer) {
         buffer = buffer.duplicate();
-        Int16Array result = window.createInt16Array(buffer.remaining());
+        Int16Array result = Int16Array.create(buffer.remaining());
         short[] tmp;
         if (buffer.hasArray()) {
             tmp = buffer.array();
@@ -134,7 +134,7 @@ public class TeaVMGL20 implements GL20 {
 
     public Int32Array copy(IntBuffer buffer) {
         buffer = buffer.duplicate();
-        Int32Array result = window.createInt32Array(buffer.remaining());
+        Int32Array result = Int32Array.create(buffer.remaining());
         int[] tmp;
         if (buffer.hasArray()) {
             tmp = buffer.array();
@@ -150,7 +150,7 @@ public class TeaVMGL20 implements GL20 {
 
     public Int8Array copy(ByteBuffer buffer) {
         buffer = buffer.duplicate();
-        Int8Array result = window.createInt8Array(buffer.remaining());
+        Int8Array result = Int8Array.create(buffer.remaining());
         byte[] tmp;
         if (buffer.hasArray()) {
             tmp = buffer.array();
@@ -166,7 +166,7 @@ public class TeaVMGL20 implements GL20 {
 
     public Uint8Array copyU(ByteBuffer buffer) {
         buffer = buffer.duplicate();
-        Uint8Array result = window.createUint8Array(buffer.remaining());
+        Uint8Array result = Uint8Array.create(buffer.remaining());
         byte[] tmp;
         if (buffer.hasArray()) {
             tmp = buffer.array();
@@ -479,7 +479,7 @@ public class TeaVMGL20 implements GL20 {
 
         // create new ArrayBufferView (4 bytes per pixel)
         int size = 4 * width * height;
-        Uint8Array buffer = window.createUint8Array(size);
+        Uint8Array buffer = Uint8Array.create(size);
 
         // read bytes to ArrayBufferView
         gl.readPixels(x, y, width, height, format, type, buffer);
