@@ -66,11 +66,7 @@ public class TeaVMApplication implements Application {
     }
 
     private void delayedStep() {
-        window.setTimeout(new TimerHandler() {
-            @Override public void onTimer() {
-                step();
-            }
-        }, 10);
+        window.setTimeout(() -> step(), 10);
     }
 
     private void step() {

@@ -21,14 +21,11 @@ public class OverlayTransformer implements ClassHolderTransformer {
         cls.removeMethod(cls.getMethod(desc));
         ClassReader patchClass = classSource.get(ControllersEmulator.class.getName());
         MethodHolder patch = ModelUtils.copyMethod(patchClass.getMethod(desc));
-        ClassRefsRenamer renamer = new ClassRefsRenamer(new Mapper<String, String>() {
-            @Override
-            public String map(String preimage) {
-                if (preimage.equals(ControllersEmulator.class.getName())) {
-                    return Controllers.class.getName();
-                }
-                return preimage;
+        ClassRefsRenamer renamer = new ClassRefsRenamer(preimage -> {
+            if (preimage.equals(ControllersEmulator.class.getName())) {
+                return Controllers.class.getName();
             }
+            return preimage;
         });
         cls.addMethod(renamer.rename(patch));
     }

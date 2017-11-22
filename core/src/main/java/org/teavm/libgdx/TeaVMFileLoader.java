@@ -22,18 +22,15 @@ public class TeaVMFileLoader {
     private static final XMLHttpRequest xhr = XMLHttpRequest.create();
 
     public static void loadFiles(final TeaVMFilePreloadListener listener) {
-        xhr.setOnReadyStateChange(new ReadyStateChangeHandler() {
-            @Override
-            public void stateChanged() {
-                if (xhr.getReadyState() != XMLHttpRequest.DONE) {
-                    return;
-                }
-                if (xhr.getStatus() != 200) {
-                    listener.error();
-                    return;
-                }
-                loadAll(listener);
+        xhr.setOnReadyStateChange(() -> {
+            if (xhr.getReadyState() != XMLHttpRequest.DONE) {
+                return;
             }
+            if (xhr.getStatus() != 200) {
+                listener.error();
+                return;
+            }
+            loadAll(listener);
         });
         xhr.open("GET", "filesystem.json");
         xhr.send();

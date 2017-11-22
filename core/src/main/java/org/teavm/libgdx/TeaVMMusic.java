@@ -19,11 +19,9 @@ public class TeaVMMusic implements Music {
     public TeaVMMusic(TeaVMFileHandle file) {
         element = (HTMLAudioElement)window.getDocument().createElement("audio");
         element.setSrc("assets/" + file.path());
-        element.addEventListener("ended", new EventListener() {
-            @Override public void handleEvent(Event evt) {
-                if (listener != null) {
-                    listener.onCompletion(TeaVMMusic.this);
-                }
+        element.addEventListener("ended", (EventListener) evt -> {
+            if (listener != null) {
+                listener.onCompletion(TeaVMMusic.this);
             }
         });
         window.getDocument().getBody().appendChild(element);

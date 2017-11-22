@@ -22,17 +22,13 @@ public class GamepadSupport {
     public static void init(GamepadSupportListener listener) {
         GamepadSupport.listener = listener;
         if (isGamepardSupportAvailable()) {
-            window.addEventListener("MozGamepadConnected", new EventListener() {
-                @Override public void handleEvent(Event evt) {
-                    GamepadEvent gamepadEvent = (GamepadEvent)evt;
-                    handleGamepadConnect(gamepadEvent);
-                }
+            window.addEventListener("MozGamepadConnected", (EventListener) evt -> {
+                GamepadEvent gamepadEvent = (GamepadEvent)evt;
+                handleGamepadConnect(gamepadEvent);
             });
-            window.addEventListener("MozGamepadDisconnected", new EventListener() {
-                @Override public void handleEvent(Event evt) {
-                    GamepadEvent gamepadEvent = (GamepadEvent)evt;
-                    handleGamepadDisconnect(gamepadEvent);
-                }
+            window.addEventListener("MozGamepadDisconnected", (EventListener) evt -> {
+                GamepadEvent gamepadEvent = (GamepadEvent)evt;
+                handleGamepadDisconnect(gamepadEvent);
             });
             if (shouldStartPolling()) {
                 startPolling();
@@ -45,10 +41,7 @@ public class GamepadSupport {
             return;
         }
         consoleLog("startPolling");
-        timerId = window.setInterval(new TimerHandler() {
-            @Override
-            public void onTimer() {
-            }
+        timerId = window.setInterval(() -> {
         }, 100);
     }
 
@@ -129,16 +122,16 @@ public class GamepadSupport {
         onGamepadDisconnect(event.getGamepad());
     }
 
-    @JSBody(params = {}, script =
+    @JSBody(script =
             "return !!navigator.getGamepads || !!navigator.webkitGamepads || !!navigator.webkitGetGamepads;")
     private static native boolean shouldStartPolling();
 
-    @JSBody(params = {}, script =
+    @JSBody(script =
         "return !!navigator.getGamepads || !!navigator.webkitGetGamepads || " +
                 "!!navigator.webkitGamepads || (navigator.userAgent.indexOf('Firefox/') != -1);")
     private static native boolean isGamepardSupportAvailable();
 
-    @JSBody(params = {}, script =
+    @JSBody(script =
         "return rawGamepads = (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || " +
                 "navigator.webkitGamepads;")
     private static native JSArray<Gamepad> nativePollGamepads();

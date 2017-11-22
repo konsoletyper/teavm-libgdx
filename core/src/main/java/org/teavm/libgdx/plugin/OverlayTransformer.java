@@ -171,12 +171,8 @@ public class OverlayTransformer implements ClassHolderTransformer {
     }
 
     private void replaceClass(final ClassHolder cls, final ClassReader emuCls) {
-        ClassRefsRenamer renamer = new ClassRefsRenamer(new Mapper<String, String>() {
-            @Override
-            public String map(String preimage) {
-                return preimage.equals(emuCls.getName()) ? cls.getName() : preimage;
-            }
-        });
+        ClassRefsRenamer renamer = new ClassRefsRenamer(preimage ->
+                preimage.equals(emuCls.getName()) ? cls.getName() : preimage);
         for (FieldHolder field : cls.getFields().toArray(new FieldHolder[0])) {
             cls.removeField(field);
         }
