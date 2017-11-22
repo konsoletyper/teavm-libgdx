@@ -20,7 +20,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import java.io.*;
 import java.util.*;
-import org.teavm.dom.html.HTMLImageElement;
+import org.teavm.jso.dom.html.HTMLImageElement;
 
 /**
  *

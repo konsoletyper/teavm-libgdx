@@ -1,6 +1,6 @@
 package org.teavm.libgdx;
 
-import org.teavm.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
 
 public class TeaVMApplicationConfig {
     private HTMLCanvasElement canvas;

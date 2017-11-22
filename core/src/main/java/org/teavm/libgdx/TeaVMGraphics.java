@@ -20,7 +20,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import org.teavm.dom.browser.Screen;
 import org.teavm.jso.browser.Window;
-import org.teavm.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.dom.webgl.WebGLContextAttributes;
 import org.teavm.dom.webgl.WebGLContextAttributesFactory;
 import org.teavm.dom.webgl.WebGLRenderingContext;

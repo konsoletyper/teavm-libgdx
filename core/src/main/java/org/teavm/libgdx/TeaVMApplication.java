@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.teavm.dom.browser.TimerHandler;
 import org.teavm.jso.browser.Window;
-import org.teavm.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.JS;
 import org.teavm.jso.JSBody;
 import com.badlogic.gdx.Application;
